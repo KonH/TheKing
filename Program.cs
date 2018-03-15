@@ -6,7 +6,8 @@ namespace TheKing
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+			//Content.Culture = new System.Globalization.CultureInfo("ru-RU");
+			Console.WriteLine(Content.hello);
         }
     }
 }
