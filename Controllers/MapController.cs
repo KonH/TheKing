@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
 namespace TheKing.Controllers {
-	class MapController : StateController, IUpdateController {
+	class MapController : StateController, IUpdateHandler {
 
 		struct Point {
-			public int X { get; set; }
-			public int Y { get; set; }
+			public int X { get; }
+			public int Y { get; }
 
 			public Point(int x, int y) {
 				X = x;
@@ -39,7 +39,6 @@ namespace TheKing.Controllers {
 		Dictionary<Point, Location> _locations;
 
 		public MapController(GameState state):base(state) {
-			_position = new Point(0, 0);
 			_locations = new Dictionary<Point, Location>();
 
 			var oceanLoc = new Location("Great Ocean");
@@ -57,6 +56,12 @@ namespace TheKing.Controllers {
 
 			_locations.Add(new Point(0, -1), new Location("Death Barrens"));
 			_locations.Add(new Point(0, -2), oceanLoc);
+
+			ResetPosition();
+		}
+
+		void ResetPosition() {
+			_position = new Point(0, 0);
 		}
 
 		public void Update() {
@@ -71,7 +76,7 @@ namespace TheKing.Controllers {
 					});
 				}
 			}
-			State.Context.AddCase(Content.go_back, State.Context.ResetContext);
+			State.Context.AddBackCaseWith(ResetPosition);
 		}
 
 		Location GetLocationAt(Point pos) {

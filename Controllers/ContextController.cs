@@ -15,8 +15,9 @@ namespace TheKing.Controllers {
 	class ContextController : StateController {
 		public List<Case> Cases => new List<Case>(_cases);
 
-		IUpdateController _curContext;
-		bool              _started;
+		IUpdateHandler  _curContext;
+		IWelcomeHandler _curWelcome;
+		bool               _started;
 
 		List<Case> _cases = new List<Case>();
 
@@ -24,6 +25,17 @@ namespace TheKing.Controllers {
 
 		public void AddCase(string title, Action callback) {
 			_cases.Add(new Case(title, callback));
+		}
+
+		public void AddBackCase() {
+			AddBackCaseWith(null);
+		}
+
+		public void AddBackCaseWith(Action callback) {
+			AddCase(Content.go_back, () => {
+				callback?.Invoke();
+				ResetContext();
+			});
 		}
 
 		public void ClearCases() {
@@ -42,10 +54,21 @@ namespace TheKing.Controllers {
 					State.Out.Write(Content.hello_message);
 					_started = true;
 				}
-				AddCase(Content.go_to_map, () => _curContext = State.Map);
+				AddCase(Content.go_to_map, () => GoTo(State.Map));
+				AddCase(Content.go_to_bank, () => GoTo(State.Money));
+				AddCase(Content.next_day, () => State.Time.NextDay());
 			} else {
+				if ( _curWelcome != null ) {
+					_curWelcome.Welcome();
+					_curWelcome = null;
+				}
 				_curContext.Update();
 			}
+		}
+
+		void GoTo(IUpdateHandler controller) {
+			_curContext = controller;
+			_curWelcome = _curContext as IWelcomeHandler;
 		}
 	}
 }

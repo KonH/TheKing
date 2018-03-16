@@ -61,11 +61,47 @@ namespace TheKing {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Go back th the throne..
+        ///   Looks up a localized string similar to How much gold do we have?.
+        /// </summary>
+        internal static string bank_balance_request {
+            get {
+                return ResourceManager.GetString("bank_balance_request", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We have {0} gold coins, sir..
+        /// </summary>
+        internal static string bank_balance_response {
+            get {
+                return ResourceManager.GetString("bank_balance_response", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Greetings, my master!.
+        /// </summary>
+        internal static string bank_welcome {
+            get {
+                return ResourceManager.GetString("bank_welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go back to the throne..
         /// </summary>
         internal static string go_back {
             get {
                 return ResourceManager.GetString("go_back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to the paymaster..
+        /// </summary>
+        internal static string go_to_bank {
+            get {
+                return ResourceManager.GetString("go_to_bank", resourceCulture);
             }
         }
         
@@ -79,7 +115,7 @@ namespace TheKing {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hello, your majesty!.
+        ///   Looks up a localized string similar to Hello, your majesty! It is first day of your regiment..
         /// </summary>
         internal static string hello_message {
             get {
@@ -97,6 +133,24 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What did we earn yesterday?.
+        /// </summary>
+        internal static string income_request {
+            get {
+                return ResourceManager.GetString("income_request", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We earn {0} coins for:.
+        /// </summary>
+        internal static string income_response {
+            get {
+                return ResourceManager.GetString("income_response", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Look at {0}..
         /// </summary>
         internal static string look_at {
@@ -106,11 +160,56 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to the bed..
+        /// </summary>
+        internal static string next_day {
+            get {
+                return ResourceManager.GetString("next_day", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What did we spent yesterday?.
+        /// </summary>
+        internal static string outcome_request {
+            get {
+                return ResourceManager.GetString("outcome_request", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We spent {0} coins for:.
+        /// </summary>
+        internal static string outcome_response {
+            get {
+                return ResourceManager.GetString("outcome_response", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It&apos;s you again..
         /// </summary>
         internal static string root_message {
             get {
                 return ResourceManager.GetString("root_message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Taxes.
+        /// </summary>
+        internal static string taxes_name {
+            get {
+                return ResourceManager.GetString("taxes_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Today is {0}..
+        /// </summary>
+        internal static string time_report {
+            get {
+                return ResourceManager.GetString("time_report", resourceCulture);
             }
         }
     }
