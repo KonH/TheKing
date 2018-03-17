@@ -42,9 +42,7 @@
 			State.Money.ClearHistory();
 			CurDate = Date.NextDay(CurDate);
 			State.Out.WriteFormat(Content.time_report, CurDate);
-			foreach ( var hander in State.NextDayHandlers ) {
-				hander.OnNextDay();
-			}
+			State.FireNextDay();
 			State.Out.Write();
 		}
 	}

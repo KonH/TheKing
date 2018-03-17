@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using TheKing.Controllers;
 
 namespace TheKing {
@@ -18,10 +18,6 @@ namespace TheKing {
 		void Welcome();
 	}
 
-	interface INextDayHandler {
-		void OnNextDay();
-	}
-
 	class GameState {
 		public ContextController    Context    { get; }
 		public InputController      Input      { get; }
@@ -31,7 +27,7 @@ namespace TheKing {
 		public TimeController       Time       { get; }
 		public PopulationController Population { get; }
 
-		public List<INextDayHandler> NextDayHandlers { get; } = new List<INextDayHandler>();
+		public event Action OnNextDay = new Action(() => {});
 
 		public GameState() {
 			Context    = new ContextController(this);
@@ -40,14 +36,7 @@ namespace TheKing {
 			Map        = new MapController(this);
 			Money      = new MoneyController(this);
 			Time       = new TimeController(this);
-			Population = AddController(new PopulationController(this));
-		}
-
-		T AddController<T>(T controller) {
-			if ( controller is INextDayHandler nextDay ) {
-				NextDayHandlers.Add(nextDay);
-			}
-			return controller;
+			Population = new PopulationController(this);
 		}
 
 		public void Run() {
@@ -67,5 +56,8 @@ namespace TheKing {
 			return false;
 		}
 
+		public void FireNextDay() {
+			OnNextDay?.Invoke();
+		}
 	}
 }
