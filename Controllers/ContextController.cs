@@ -17,7 +17,7 @@ namespace TheKing.Controllers {
 
 		IUpdateHandler  _curContext;
 		IWelcomeHandler _curWelcome;
-		bool               _started;
+		bool            _started;
 
 		List<Case> _cases = new List<Case>();
 
@@ -56,6 +56,7 @@ namespace TheKing.Controllers {
 				}
 				AddCase(Content.go_to_map, () => GoTo(State.Map));
 				AddCase(Content.go_to_bank, () => GoTo(State.Money));
+				AddCase(Content.go_to_army, () => GoTo(State.Army));
 				AddCase(Content.next_day, () => State.Time.NextDay());
 			} else {
 				if ( _curWelcome != null ) {

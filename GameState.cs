@@ -26,6 +26,7 @@ namespace TheKing {
 		public MoneyController      Money      { get; }
 		public TimeController       Time       { get; }
 		public PopulationController Population { get; }
+		public ArmyController       Army       { get; }
 
 		public event Action OnNextDay = new Action(() => {});
 
@@ -37,6 +38,7 @@ namespace TheKing {
 			Money      = new MoneyController(this);
 			Time       = new TimeController(this);
 			Population = new PopulationController(this);
+			Army       = new ArmyController(this);
 		}
 
 		public void Run() {

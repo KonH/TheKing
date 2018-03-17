@@ -23,5 +23,14 @@ namespace TheKing.Controllers {
 			}
 			return null;
 		}
+
+		public int ReadInt() {
+			while ( true ) {
+				var selection = Console.ReadLine();
+				if ( int.TryParse(selection, out var value) ) {
+					return value;
+				}
+			}
+		}
 	}
 }

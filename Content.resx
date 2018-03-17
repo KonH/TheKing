@@ -121,7 +121,7 @@
     <value>How much gold do we have?</value>
   </data>
   <data name="bank_balance_response" xml:space="preserve">
-    <value>We have {0} gold coins, sir.</value>
+    <value>- We have {0} gold coins, sir.</value>
   </data>
   <data name="bank_welcome" xml:space="preserve">
     <value>- Greetings, my master!</value>
@@ -136,7 +136,7 @@
     <value>Go to the map.</value>
   </data>
   <data name="hello_message" xml:space="preserve">
-    <value>Hello, your majesty! It is first day of your regiment.</value>
+    <value>- Hello, your majesty! It is first day of your regiment.</value>
   </data>
   <data name="here_is" xml:space="preserve">
     <value>Here is {0}.</value>
@@ -145,7 +145,7 @@
     <value>What did we earn yesterday?</value>
   </data>
   <data name="income_response" xml:space="preserve">
-    <value>We earn {0} coins for:</value>
+    <value>- We earn {0} coins for:</value>
   </data>
   <data name="look_at" xml:space="preserve">
     <value>Look at {0}.</value>
@@ -157,7 +157,7 @@
     <value>What did we spent yesterday?</value>
   </data>
   <data name="outcome_response" xml:space="preserve">
-    <value>We spent {0} coins for:</value>
+    <value>- We spent {0} coins for:</value>
   </data>
   <data name="root_message" xml:space="preserve">
     <value>It's you again.</value>
@@ -167,5 +167,23 @@
   </data>
   <data name="time_report" xml:space="preserve">
     <value>Today is {0}.</value>
+  </data>
+  <data name="army_welcome" xml:space="preserve">
+    <value>- Greetings, my lord!</value>
+  </data>
+  <data name="army_recruit_request" xml:space="preserve">
+    <value>I want to recruit more soldiers.</value>
+  </data>
+  <data name="army_recruit_request_2" xml:space="preserve">
+    <value>- How many?</value>
+  </data>
+  <data name="army_recruit_response" xml:space="preserve">
+    <value>- Roger that!</value>
+  </data>
+  <data name="go_to_army" xml:space="preserve">
+    <value>Go to the general.</value>
+  </data>
+  <data name="army_name" xml:space="preserve">
+    <value>Army</value>
   </data>
 </root>

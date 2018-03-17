@@ -10,8 +10,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Content.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Content.ru-RU.resx">
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Content.Designer.cs">
