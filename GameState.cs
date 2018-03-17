@@ -30,6 +30,8 @@ namespace TheKing {
 
 		public event Action OnNextDay = new Action(() => {});
 
+		bool _failed;
+
 		public GameState() {
 			Context    = new ContextController(this);
 			Input      = new InputController(this);
@@ -46,6 +48,9 @@ namespace TheKing {
 		}
 
 		bool Update() {
+			if ( _failed ) {
+				return false;
+			}
 			Context.ClearCases();
 			Context.Update();
 			Out.Write();
@@ -60,6 +65,10 @@ namespace TheKing {
 
 		public void FireNextDay() {
 			OnNextDay?.Invoke();
+			if ( Money.Balance.Value < 0 ) {
+				Out.Write(Content.game_over_money);
+				_failed = true;
+			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace TheKing {
 	class Program {
@@ -6,6 +7,8 @@ namespace TheKing {
 			//Content.Culture = new CultureInfo("ru-RU");
 			var state = new GameState();
 			state.Run();
+			Console.WriteLine("Press any key...");
+			Console.ReadKey();
 		}
 	}
 }

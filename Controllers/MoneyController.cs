@@ -45,14 +45,15 @@ namespace TheKing.Controllers {
 			}
 		}
 
-		Gold              _balance = new Gold();
+		public Gold Balance { get; private set; } = new Gold();
+
 		List<HistoryItem> _history = new List<HistoryItem>();
 
 		public MoneyController(GameState state) : base(state) { }
 
 		public void Add(string title, Gold value) {
 			_history.Add(new HistoryItem(title, value));
-			_balance = _balance.Add(value);
+			Balance = Balance.Add(value);
 		}
 
 		public void ClearHistory() {
@@ -66,7 +67,7 @@ namespace TheKing.Controllers {
 		public void Update() {
 			State.Context.AddCase(
 				Content.bank_balance_request,
-				() => State.Out.WriteFormat(Content.bank_balance_response, _balance));
+				() => State.Out.WriteFormat(Content.bank_balance_response, Balance));
 
 			AddCaseIfNonEmpty(Content.income_request,  Content.income_response,  item => item.Gold > Gold.Zero);
 			AddCaseIfNonEmpty(Content.outcome_request, Content.outcome_response, item => item.Gold < Gold.Zero);

@@ -184,5 +184,11 @@ namespace TheKing {
                 return ResourceManager.GetString("army_name", resourceCulture);
             }
         }
+        
+        internal static string game_over_money {
+            get {
+                return ResourceManager.GetString("game_over_money", resourceCulture);
+            }
+        }
     }
 }

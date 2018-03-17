@@ -186,4 +186,7 @@
   <data name="army_name" xml:space="preserve">
     <value>Army</value>
   </data>
+  <data name="game_over_money" xml:space="preserve">
+    <value>Your treasury is empty.</value>
+  </data>
 </root>
