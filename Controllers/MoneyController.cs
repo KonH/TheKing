@@ -1,47 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TheKing.Controllers.Money;
 
 namespace TheKing.Controllers {
-	struct Gold : IComparable<Gold> {
-		public int Value { get; }
-
-		public Gold(int value) {
-			Value = value;
-		}
-
-		public override string ToString() {
-			return Value.ToString();
-		}
-
-		public Gold Add(Gold addGold) {
-			return new Gold(Value + addGold.Value);
-		}
-
-		public int CompareTo(Gold other) {
-			return Value.CompareTo(other.Value);
-		}
-
-		public static Gold Zero => new Gold(0);
-
-		public static bool operator >(Gold lhr, Gold rhr) {
-			return lhr.CompareTo(rhr) > 0;
-		}
-
-		public static bool operator <(Gold lhr, Gold rhr) {
-			return lhr.CompareTo(rhr) <= 0;
-		}
-	}
-	
 	class MoneyController : StateController, IUpdateHandler, IWelcomeHandler {
 
 		class HistoryItem {
 			public string Title { get; }
-			public Gold   Gold { get; }
+			public Gold   Gold  { get; }
 
 			public HistoryItem(string title, Gold value) {
 				Title = title;
-				Gold = value;
+				Gold  = value;
 			}
 		}
 

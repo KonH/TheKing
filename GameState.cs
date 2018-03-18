@@ -2,22 +2,6 @@
 using TheKing.Controllers;
 
 namespace TheKing {
-	abstract class StateController {
-		protected GameState State { get; }
-
-		public StateController(GameState state) {
-			State = state;
-		}
-	}
-
-	interface IUpdateHandler {
-		void Update();
-	}
-
-	interface IWelcomeHandler {
-		void Welcome();
-	}
-
 	class GameState {
 		public ContextController    Context    { get; }
 		public InputController      Input      { get; }

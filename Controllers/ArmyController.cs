@@ -1,4 +1,6 @@
-﻿namespace TheKing.Controllers {
+﻿using TheKing.Controllers.Money;
+
+namespace TheKing.Controllers {
 	class ArmyController : StateController, IUpdateHandler, IWelcomeHandler {
 		public int Count { get; set; }
 		public int Price { get; set; } = 5;

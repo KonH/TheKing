@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace TheKing.Controllers {
 	class InputController : StateController {
-
 		public InputController(GameState state) : base(state) { }
 
 		public Action Update(IList<Case> cases) {

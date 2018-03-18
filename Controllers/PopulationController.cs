@@ -1,10 +1,11 @@
 ﻿using System;
+using TheKing.Controllers.Money;
 
 namespace TheKing.Controllers {
 	class PopulationController : StateController {
-		public int    Count { get; set; } = 100;
-		public double TaxRate    { get; } = 0.25;
-		public double GrowthRate { get; } = 0.01;
+		public int    Count      { get; set; } = 100;
+		public double TaxRate    { get; }      = 0.25;
+		public double GrowthRate { get; }      = 0.01;
 
 		double _growthAccum;
 
