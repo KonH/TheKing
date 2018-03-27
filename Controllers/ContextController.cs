@@ -32,7 +32,7 @@ namespace TheKing.Controllers {
 		}
 
 		public void AddBackCaseWith(Action callback) {
-			AddCase(Content.go_back, () => {
+			AddCase(Content.go_back_to_start, () => {
 				callback?.Invoke();
 				ResetContext();
 			});
@@ -67,9 +67,11 @@ namespace TheKing.Controllers {
 			}
 		}
 
-		void GoTo(IUpdateHandler controller) {
+		public void GoTo(IUpdateHandler controller, bool firstTime = true) {
 			_curContext = controller;
-			_curWelcome = _curContext as IWelcomeHandler;
+			if ( firstTime ) {
+				_curWelcome = _curContext as IWelcomeHandler;
+			}
 		}
 	}
 }

@@ -32,23 +32,23 @@ namespace TheKing.Controllers {
 		}
 
 		public void Welcome() {
-			State.Out.Write(Content.bank_welcome);
+			Out.Write(Content.bank_welcome);
 		}
 
 		public void Update() {
-			State.Context.AddCase(
+			Context.AddCase(
 				Content.bank_balance_request,
-				() => State.Out.WriteFormat(Content.bank_balance_response, Balance));
+				() => Out.WriteFormat(Content.bank_balance_response, Balance));
 
 			AddCaseIfNonEmpty(Content.income_request,  Content.income_response,  item => item.Gold > Gold.Zero);
 			AddCaseIfNonEmpty(Content.outcome_request, Content.outcome_response, item => item.Gold < Gold.Zero);
-			State.Context.AddBackCase();
+			Context.AddBackCase();
 		}
 
 		void AddCaseIfNonEmpty(string request, string response, Func<HistoryItem, bool> selector) {
 			var items = _history.Where(selector);
 			if ( items.Any() ) {
-				State.Context.AddCase(
+				Context.AddCase(
 					request,
 					() => HandleHistoryRequest(response, items));
 			}
@@ -56,9 +56,9 @@ namespace TheKing.Controllers {
 
 		void HandleHistoryRequest(string title, IEnumerable<HistoryItem> items) {
 			var sum = items.Sum(item => item.Gold.Value);
-			State.Out.WriteFormat(title, Math.Abs(sum));
+			Out.WriteFormat(title, Math.Abs(sum));
 			foreach ( var it in items ) {
-				State.Out.WriteFormat($"- {it.Title}: {Math.Abs(it.Gold.Value)}");
+				Out.WriteFormat($"- {it.Title}: {Math.Abs(it.Gold.Value)}");
 			}
 			
 		}

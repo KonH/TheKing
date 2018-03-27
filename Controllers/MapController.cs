@@ -81,21 +81,21 @@ namespace TheKing.Controllers {
 				var locationAt = GetLocationAt(_position, dir);
 				if ( locationAt != null ) {
 					var title = string.Format(Content.look_at, dir);
-					State.Context.AddCase(title, () => {
+					Context.AddCase(title, () => {
 						_position = TransformPoint(_position, dir);
 					});
 				}
 			}
-			State.Context.AddBackCaseWith(ResetPosition);
+			Context.AddBackCaseWith(ResetPosition);
 		}
 
 		void DescribeLocation(Location loc) {
-			State.Out.WriteFormat(Content.here_is, loc.Name);
+			Out.WriteFormat(Content.here_is, loc.Name);
 			if ( loc.Owner != null ) {
 				var raceName = Content.ResourceManager.GetString("race_" + loc.Owner.Kind.Id);
-				State.Out.WriteFormat(Content.here_live, loc.Owner.Name, raceName);
+				Out.WriteFormat(Content.here_live, loc.Owner.Name, raceName);
 			} else {
-				State.Out.Write(Content.here_empty);
+				Out.Write(Content.here_empty);
 			}
 		}
 

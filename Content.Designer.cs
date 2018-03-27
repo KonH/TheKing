@@ -142,11 +142,20 @@ namespace TheKing {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Go back to the throne..
+        ///   Looks up a localized string similar to Back..
         /// </summary>
         internal static string go_back {
             get {
                 return ResourceManager.GetString("go_back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go back to the throne..
+        /// </summary>
+        internal static string go_back_to_start {
+            get {
+                return ResourceManager.GetString("go_back_to_start", resourceCulture);
             }
         }
         

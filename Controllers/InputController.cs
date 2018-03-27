@@ -9,7 +9,7 @@ namespace TheKing.Controllers {
 		public Action Update(IList<Case> cases) {
 			if ( cases.Any() ) {
 				for ( var i = 0; i < cases.Count; i++ ) {
-					State.Out.Write($"{i + 1}) {cases[i].Title}");
+					Out.Write($"{i + 1}) {cases[i].Title}");
 				}
 				while ( true ) {
 					var selection = Console.ReadLine();

@@ -10,22 +10,22 @@ namespace TheKing.Controllers {
 		}
 
 		public void Welcome() {
-			State.Out.Write(Content.army_welcome);
+			Out.Write(Content.army_welcome);
 		}
 
 		public void Update() {
-			State.Context.AddCase(
+			Context.AddCase(
 				Content.army_recruit_request,
 				TryRecruit);
-			State.Context.AddBackCase();
+			Context.AddBackCase();
 		}
 
 		void TryRecruit() {
-			State.Out.WriteFormat(Content.army_recruit_request_2, Price);
+			Out.WriteFormat(Content.army_recruit_request_2, Price);
 			while ( true ) {
-				var value = State.Input.ReadInt();
+				var value = Input.ReadInt();
 				if ( (value > 0) && (State.Population.Count > value) ) {
-					State.Out.Write(Content.army_recruit_response);
+					Out.Write(Content.army_recruit_response);
 					State.Population.Count -= value;
 					Count += value;
 					break;	

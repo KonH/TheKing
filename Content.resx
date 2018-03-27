@@ -126,7 +126,7 @@
   <data name="bank_welcome" xml:space="preserve">
     <value>- Greetings, my master!</value>
   </data>
-  <data name="go_back" xml:space="preserve">
+  <data name="go_back_to_start" xml:space="preserve">
     <value>Go back to the throne.</value>
   </data>
   <data name="go_to_bank" xml:space="preserve">
@@ -200,5 +200,8 @@
   </data>
   <data name="race_Human" xml:space="preserve">
     <value>humans</value>
+  </data>
+  <data name="go_back" xml:space="preserve">
+    <value>Back.</value>
   </data>
 </root>
