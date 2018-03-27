@@ -17,6 +17,11 @@ namespace TheKing.Controllers {
 			Context.AddCase(
 				Content.army_recruit_request,
 				TryRecruit);
+			if ( Count > 0 ) {
+				Context.AddCase(
+					Content.army_conquest_request,
+					() => Context.GoTo(State.Conquest));
+			}
 			Context.AddBackCase();
 		}
 

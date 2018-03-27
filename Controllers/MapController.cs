@@ -1,34 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TheKing.Controllers.Community;
+using TheKing.Controllers.Map;
 
 namespace TheKing.Controllers {
 	class MapController : StateController, IUpdateHandler {
-
-		struct Point {
-			public int X { get; }
-			public int Y { get; }
-
-			public Point(int x, int y) {
-				X = x;
-				Y = y;
-			}
-		}
 
 		enum Direction {
 			North,
 			East,
 			South,
 			West,
-		}
-
-		class Location {
-			public string  Name  { get; }
-			public Country Owner { get; }
-
-			public Location(string name, Country owner = null) {
-				Name  = name;
-				Owner = owner;
-			}
 		}
 
 		Direction[] AllDirections = {
@@ -44,29 +26,25 @@ namespace TheKing.Controllers {
 		public MapController(GameState state):base(state) {
 			_locations = new Dictionary<Point, Location>();
 
-			var oceanLoc = new Location("Great Ocean");
+			AddLocation(new Location(new Point(0, 0), "Home Planes", State.Country.PlayerCountry));
 
-			var humanRace = new Race(RaceId.Human);
-			var yourKingdom = new Country("Your Kingdom", humanRace);
+			AddLocation(new Location(new Point(0, 1), "Snow Mountains", State.Country.EnemyCountry));
+			AddLocation(new Location(new Point(0, 2), "North Pole"));
 
-			var goblinRace = new Race(RaceId.Goblin);
-			var goblinKingdom = new Country("Goblington", goblinRace);
+			AddLocation(new Location(new Point(-1, 0), "White Coast"));
+			AddLocation(new Location(new Point(-2, 0), "Great Ocean"));
 
-			_locations.Add(new Point(0, 0), new Location("Home Planes", yourKingdom));
+			AddLocation(new Location(new Point(1, 0), "Wild Forests"));
+			AddLocation(new Location(new Point(2, 0), "Great Ocean"));
 
-			_locations.Add(new Point(0, 1), new Location("Snow Mountains", goblinKingdom));
-			_locations.Add(new Point(0, 2), new Location("North Pole"));
-
-			_locations.Add(new Point(-1, 0), new Location("White Coast"));
-			_locations.Add(new Point(-2, 0), oceanLoc);
-
-			_locations.Add(new Point(1, 0), new Location("Wild Forests"));
-			_locations.Add(new Point(2, 0), oceanLoc);
-
-			_locations.Add(new Point(0, -1), new Location("Death Barrens"));
-			_locations.Add(new Point(0, -2), oceanLoc);
+			AddLocation(new Location(new Point(0, -1), "Death Barrens"));
+			AddLocation(new Location(new Point(0, -2), "Great Ocean"));
 
 			ResetPosition();
+		}
+
+		void AddLocation(Location loc) {
+			_locations.Add(loc.Point, loc);
 		}
 
 		void ResetPosition() {
@@ -118,6 +96,21 @@ namespace TheKing.Controllers {
 				case Direction.West : return new Point(p.X - 1, p.Y    );
 			}
 			return p;
+		}
+
+		public List<Location> GetCountryLocations(Country country) {
+			return _locations.Values.Where(loc => loc.Owner == country).ToList();
+		}
+
+		public List<Location> GetNearLocations(Point point) {
+			var result = new List<Location>();
+			foreach ( var dir in AllDirections ) {
+				var locationAt = GetLocationAt(point, dir);
+				if ( locationAt != null ) {
+					result.Add(locationAt);
+				}
+			}
+			return result;
 		}
 	}
 }

@@ -6,11 +6,13 @@ namespace TheKing {
 		public ContextController    Context    { get; }
 		public InputController      Input      { get; }
 		public OutputController     Out        { get; }
+		public CountryController    Country    { get; }
 		public MapController        Map        { get; }
 		public MoneyController      Money      { get; }
 		public TimeController       Time       { get; }
 		public PopulationController Population { get; }
 		public ArmyController       Army       { get; }
+		public ConquestController   Conquest   { get; }
 
 		public event Action OnNextDay = new Action(() => {});
 
@@ -20,11 +22,13 @@ namespace TheKing {
 			Context    = new ContextController(this);
 			Input      = new InputController(this);
 			Out        = new OutputController();
+			Country    = new CountryController(this);
 			Map        = new MapController(this);
 			Money      = new MoneyController(this);
 			Time       = new TimeController(this);
 			Population = new PopulationController(this);
 			Army       = new ArmyController(this);
+			Conquest   = new ConquestController(this);
 		}
 
 		public void Run() {

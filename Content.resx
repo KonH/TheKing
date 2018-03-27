@@ -201,6 +201,9 @@
   <data name="race_Human" xml:space="preserve">
     <value>humans</value>
   </data>
+  <data name="army_conquest_request" xml:space="preserve">
+    <value>I want to extend my kingdom.</value>
+  </data>
   <data name="go_back" xml:space="preserve">
     <value>Back.</value>
   </data>

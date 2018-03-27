@@ -61,6 +61,15 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I want to extend my kingdom..
+        /// </summary>
+        internal static string army_conquest_request {
+            get {
+                return ResourceManager.GetString("army_conquest_request", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Army.
         /// </summary>
         internal static string army_name {
