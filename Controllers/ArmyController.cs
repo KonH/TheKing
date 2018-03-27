@@ -21,7 +21,7 @@ namespace TheKing.Controllers {
 		}
 
 		void TryRecruit() {
-			State.Out.Write(Content.army_recruit_request_2);
+			State.Out.WriteFormat(Content.army_recruit_request_2, Price);
 			while ( true ) {
 				var value = State.Input.ReadInt();
 				if ( (value > 0) && (State.Population.Count > value) ) {

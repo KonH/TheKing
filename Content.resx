@@ -175,7 +175,7 @@
     <value>I want to recruit more soldiers.</value>
   </data>
   <data name="army_recruit_request_2" xml:space="preserve">
-    <value>- How many?</value>
+    <value>- How many? ({0}/soldier)</value>
   </data>
   <data name="army_recruit_response" xml:space="preserve">
     <value>- Roger that!</value>
