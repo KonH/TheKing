@@ -189,4 +189,16 @@
   <data name="game_over_money" xml:space="preserve">
     <value>Your treasury is empty.</value>
   </data>
+  <data name="here_empty" xml:space="preserve">
+    <value>Nobody lives here.</value>
+  </data>
+  <data name="here_live" xml:space="preserve">
+    <value>Here live: {0} ({1}).</value>
+  </data>
+  <data name="race_Goblin" xml:space="preserve">
+    <value>goblins</value>
+  </data>
+  <data name="race_Human" xml:space="preserve">
+    <value>humans</value>
+  </data>
 </root>

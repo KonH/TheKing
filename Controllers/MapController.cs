@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TheKing.Controllers.Community;
 
 namespace TheKing.Controllers {
 	class MapController : StateController, IUpdateHandler {
@@ -21,10 +22,12 @@ namespace TheKing.Controllers {
 		}
 
 		class Location {
-			public string Name { get; }
+			public string  Name  { get; }
+			public Country Owner { get; }
 
-			public Location(string name) {
-				Name = name;
+			public Location(string name, Country owner = null) {
+				Name  = name;
+				Owner = owner;
 			}
 		}
 
@@ -43,9 +46,15 @@ namespace TheKing.Controllers {
 
 			var oceanLoc = new Location("Great Ocean");
 
-			_locations.Add(new Point(0, 0), new Location("Your Kingdom"));
+			var humanRace = new Race(RaceId.Human);
+			var yourKingdom = new Country("Your Kingdom", humanRace);
 
-			_locations.Add(new Point(0, 1), new Location("Snow Mountains"));
+			var goblinRace = new Race(RaceId.Goblin);
+			var goblinKingdom = new Country("Goblington", goblinRace);
+
+			_locations.Add(new Point(0, 0), new Location("Home Planes", yourKingdom));
+
+			_locations.Add(new Point(0, 1), new Location("Snow Mountains", goblinKingdom));
 			_locations.Add(new Point(0, 2), new Location("North Pole"));
 
 			_locations.Add(new Point(-1, 0), new Location("White Coast"));
@@ -66,7 +75,8 @@ namespace TheKing.Controllers {
 
 		public void Update() {
 			var curLocation = GetLocationAt(_position);
-			State.Out.WriteFormat(Content.here_is, curLocation.Name);
+			DescribeLocation(curLocation);
+
 			foreach ( var dir in AllDirections ) {
 				var locationAt = GetLocationAt(_position, dir);
 				if ( locationAt != null ) {
@@ -77,6 +87,16 @@ namespace TheKing.Controllers {
 				}
 			}
 			State.Context.AddBackCaseWith(ResetPosition);
+		}
+
+		void DescribeLocation(Location loc) {
+			State.Out.WriteFormat(Content.here_is, loc.Name);
+			if ( loc.Owner != null ) {
+				var raceName = Content.ResourceManager.GetString("race_" + loc.Owner.Kind.Id);
+				State.Out.WriteFormat(Content.here_live, loc.Owner.Name, raceName);
+			} else {
+				State.Out.Write(Content.here_empty);
+			}
 		}
 
 		Location GetLocationAt(Point pos) {
