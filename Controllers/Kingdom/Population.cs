@@ -13,12 +13,15 @@ namespace TheKing.Controllers.Kingdom {
 			return new Gold((int)Math.Round(Count * TaxRate));
 		}
 
-		public void TryGrowForDay() {
+		public int TryGrowForDay() {
 			_growthAccum += Count * GrowthRate;
+			var grow = 0;
 			while ( _growthAccum > 1 ) {
 				_growthAccum--;
-				Count++;
+				grow++;
 			}
+			Count += grow;
+			return grow;
 		}
 	}
 }

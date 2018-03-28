@@ -22,7 +22,10 @@ namespace TheKing.Controllers {
 				var population = country.Population;
 				var taxes = population.GetDailyTaxIncome();
 				Money.Add(country, $"{Content.taxes_name} ({population.Count})", taxes);
-				population.TryGrowForDay();
+				var growCount = population.TryGrowForDay();
+				if ( growCount > 0 ) {
+					Debug.WriteLine($"Grow {country} population: +{growCount} = {country.Population.Count}");
+				}
 			}
 		}
 	}
