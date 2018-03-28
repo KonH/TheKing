@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using TheKing.Controllers.Kingdom;
 using TheKing.Controllers.Money;
@@ -10,12 +11,16 @@ namespace TheKing.Controllers {
 			State.Time.OnDayEnd += OnDayEnd;
 		}
 
-		public void Add(Country country, string title, Gold value) {
-			country.Money.Add(title, value);
+		public void Add(Country country, string title, Gold gold) {
+			if ( gold.Value == 0 ) {
+				return;
+			}
+			country.Money.Add(title, gold);
+			Debug.WriteLine($"Add {country} money: {gold} ('{title}') = {country.Money.Balance}");
 		}
 
-		public void Remove(Country country, string title, Gold value) {
-			Add(country, title, new Gold(-value.Value));
+		public void Remove(Country country, string title, Gold gold) {
+			Add(country, title, new Gold(-gold.Value));
 			CheckFail(country);
 		}
 

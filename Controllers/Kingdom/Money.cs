@@ -17,9 +17,6 @@ namespace TheKing.Controllers.Kingdom {
 		public List<HistoryItem> History { get; private set; } = new List<HistoryItem>();
 
 		public void Add(string title, Gold value) {
-			if ( value.Value == 0 ) {
-				return;
-			}
 			History.Add(new HistoryItem(title, value));
 			Balance = Balance.Add(value);
 		}

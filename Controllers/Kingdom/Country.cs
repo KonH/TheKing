@@ -13,7 +13,7 @@
 		}
 
 		public override string ToString() {
-			return $"Country ('{Name}', {Kind.Id})";
+			return $"('{Name}', {Kind.Id})";
 		}
 	}
 }

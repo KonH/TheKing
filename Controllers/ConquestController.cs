@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TheKing.Controllers.Kingdom;
 using TheKing.Controllers.Map;
 
 namespace TheKing.Controllers {
@@ -12,7 +13,7 @@ namespace TheKing.Controllers {
 				if ( loc.Owner != null ) {
 					name += $" ({loc.Owner.Name})";
 				}
-				Context.AddCase(name, () => TryConquest(loc));
+				Context.AddCase(name, () => TryConquest(Player, loc));
 			}
 			Context.AddCase(
 				Content.go_back,
@@ -33,8 +34,9 @@ namespace TheKing.Controllers {
 			return result;
 		}
 
-		void TryConquest(Location loc) {
-			loc.Owner = State.Country.PlayerCountry;
+		void TryConquest(Country country, Location loc) {
+			loc.Owner = country;
+			State.Population.Add(country, 100);
 		}
 	}
 }

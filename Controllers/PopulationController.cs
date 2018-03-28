@@ -1,4 +1,5 @@
-﻿using TheKing.Controllers.Kingdom;
+﻿using System.Diagnostics;
+using TheKing.Controllers.Kingdom;
 
 namespace TheKing.Controllers {
 	class PopulationController : StateController {
@@ -6,8 +7,14 @@ namespace TheKing.Controllers {
 			State.Time.OnDayStart += OnDayStart;
 		}
 
+		public void Add(Country country, int count) {
+			country.Population.Count += count;
+			Debug.WriteLine($"Add {country} population: +{count} = {country.Population.Count}");
+		}
+
 		public void Remove(Country country, int count) {
 			country.Population.Count -= count;
+			Debug.WriteLine($"Remove {country} population: -{count} = {country.Population.Count}");
 		}
 
 		void OnDayStart() {
