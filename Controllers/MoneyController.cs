@@ -1,34 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TheKing.Controllers.Kingdom;
 using TheKing.Controllers.Money;
 
 namespace TheKing.Controllers {
 	class MoneyController : StateController, IUpdateHandler, IWelcomeHandler {
+		public MoneyController(GameState state) : base(state) {
+			State.Time.OnDayEnd += OnDayEnd;
+		}
 
-		class HistoryItem {
-			public string Title { get; }
-			public Gold   Gold  { get; }
+		public void Add(Country country, string title, Gold value) {
+			country.Money.Add(title, value);
+		}
 
-			public HistoryItem(string title, Gold value) {
-				Title = title;
-				Gold  = value;
+		public void Remove(Country country, string title, Gold value) {
+			Add(country, title, new Gold(-value.Value));
+			CheckFail(country);
+		}
+
+		void OnDayEnd() {
+			ClearHistory();
+		}
+
+		void CheckFail(Country country) {
+			if ( country.Money.Balance.Value < 0 ) {
+				State.Country.Remove(country, Content.game_over_money);
 			}
 		}
 
-		public Gold Balance { get; private set; } = new Gold();
-
-		List<HistoryItem> _history = new List<HistoryItem>();
-
-		public MoneyController(GameState state) : base(state) { }
-
-		public void Add(string title, Gold value) {
-			_history.Add(new HistoryItem(title, value));
-			Balance = Balance.Add(value);
-		}
-
-		public void ClearHistory() {
-			_history.Clear();
+		void ClearHistory() {
+			foreach ( var country in Countries ) {
+				country.Money.History.Clear();
+			}
 		}
 
 		public void Welcome() {
@@ -38,7 +42,7 @@ namespace TheKing.Controllers {
 		public void Update() {
 			Context.AddCase(
 				Content.bank_balance_request,
-				() => Out.WriteFormat(Content.bank_balance_response, Balance));
+				() => Out.WriteFormat(Content.bank_balance_response, Player.Money.Balance));
 
 			AddCaseIfNonEmpty(Content.income_request,  Content.income_response,  item => item.Gold > Gold.Zero);
 			AddCaseIfNonEmpty(Content.outcome_request, Content.outcome_response, item => item.Gold < Gold.Zero);
@@ -46,7 +50,7 @@ namespace TheKing.Controllers {
 		}
 
 		void AddCaseIfNonEmpty(string request, string response, Func<HistoryItem, bool> selector) {
-			var items = _history.Where(selector);
+			var items = Player.Money.History.Where(selector);
 			if ( items.Any() ) {
 				Context.AddCase(
 					request,
@@ -60,7 +64,6 @@ namespace TheKing.Controllers {
 			foreach ( var it in items ) {
 				Out.WriteFormat($"- {it.Title}: {Math.Abs(it.Gold.Value)}");
 			}
-			
 		}
 	}
 }

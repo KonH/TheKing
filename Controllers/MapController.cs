@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TheKing.Controllers.Community;
+using TheKing.Controllers.Kingdom;
 using TheKing.Controllers.Map;
 
 namespace TheKing.Controllers {
@@ -40,6 +40,8 @@ namespace TheKing.Controllers {
 			AddLocation(new Location(new Point(0, -1), "Death Barrens"));
 			AddLocation(new Location(new Point(0, -2), "Great Ocean"));
 
+			State.Country.OnCountryRemoved += (c, r) => RemoveCountry(c);
+
 			ResetPosition();
 		}
 
@@ -49,6 +51,14 @@ namespace TheKing.Controllers {
 
 		void ResetPosition() {
 			_position = new Point(0, 0);
+		}
+
+		void RemoveCountry(Country c) {
+			foreach ( var loc in _locations ) {
+				if ( loc.Value.Owner == c ) {
+					loc.Value.Owner = null;
+				}
+			}
 		}
 
 		public void Update() {

@@ -88,7 +88,7 @@ namespace TheKing {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - How many? ({0}/soldier).
+        ///   Looks up a localized string similar to - How many? ({0}/soldier, max: {1}).
         /// </summary>
         internal static string army_recruit_request_2 {
             get {

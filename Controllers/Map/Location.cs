@@ -1,4 +1,4 @@
-﻿using TheKing.Controllers.Community;
+﻿using TheKing.Controllers.Kingdom;
 
 namespace TheKing.Controllers.Map {
 	class Location {

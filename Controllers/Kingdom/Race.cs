@@ -1,4 +1,4 @@
-﻿namespace TheKing.Controllers.Community {
+﻿namespace TheKing.Controllers.Kingdom {
 	enum RaceId {
 		Human,
 		Goblin

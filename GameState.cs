@@ -1,5 +1,5 @@
-﻿using System;
-using TheKing.Controllers;
+﻿using TheKing.Controllers;
+using TheKing.Controllers.Kingdom;
 
 namespace TheKing {
 	class GameState {
@@ -14,34 +14,49 @@ namespace TheKing {
 		public ArmyController       Army       { get; }
 		public ConquestController   Conquest   { get; }
 
-		public event Action OnNextDay = new Action(() => {});
-
-		bool _failed;
+		bool   _isFailed;
+		string _failDescription;
 
 		public GameState() {
 			Context    = new ContextController(this);
 			Input      = new InputController(this);
 			Out        = new OutputController();
-			Country    = new CountryController(this);
+			Country    = new CountryController();
 			Map        = new MapController(this);
-			Money      = new MoneyController(this);
 			Time       = new TimeController(this);
+			Money      = new MoneyController(this);
 			Population = new PopulationController(this);
 			Army       = new ArmyController(this);
 			Conquest   = new ConquestController(this);
+
+			Time.OnDayStart          += OnDayStart;
+			Country.OnCountryRemoved += CheckPlayerFail;
 		}
 
 		public void Run() {
+			Time.FirstDay();
 			while ( Update() ) { }
 		}
 
-		bool Update() {
-			if ( _failed ) {
-				return false;
+		void CheckPlayerFail(Country country, string reason) {
+			if ( Country.PlayerCountry == country ) {
+				Fail(reason);
 			}
+		}
+
+		void Fail(string description) {
+			_isFailed        = true;
+			_failDescription = description;
+		}
+
+		bool Update() {
 			Context.ClearCases();
 			Context.Update();
 			Out.Write();
+			if ( _isFailed ) {
+				Out.Write(_failDescription);
+				return false;
+			}
 			var nextAction = Input.Update(Context.Cases);
 			if ( nextAction != null ) {
 				Out.Write();
@@ -51,12 +66,9 @@ namespace TheKing {
 			return false;
 		}
 
-		public void FireNextDay() {
-			OnNextDay?.Invoke();
-			if ( Money.Balance.Value < 0 ) {
-				Out.Write(Content.game_over_money);
-				_failed = true;
-			}
+		void OnDayStart() {
+			Out.WriteFormat(Content.time_report, Time.CurDate);
+			Out.Write();
 		}
 	}
 }
