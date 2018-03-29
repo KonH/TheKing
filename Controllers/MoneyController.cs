@@ -7,16 +7,43 @@ using TheKing.Controllers.Money;
 
 namespace TheKing.Controllers {
 	class MoneyController : StateController, IUpdateHandler, IWelcomeHandler {
+		class HistoryItem {
+			public string Title { get; }
+			public Gold   Gold  { get; }
+
+			public HistoryItem(string title, Gold value) {
+				Title = title;
+				Gold  = value;
+			}
+		}
+
+		class MoneyState {
+			public Gold              Balance { get; private set; } = new Gold();
+			public List<HistoryItem> History { get; private set; } = new List<HistoryItem>();
+
+			public void Add(string title, Gold value) {
+				History.Add(new HistoryItem(title, value));
+				Balance = Balance.Add(value);
+			}
+		}
+
+		Dictionary<Country, MoneyState> _moneyStates = new Dictionary<Country, MoneyState>();
+
 		public MoneyController(GameState state) : base(state) {
 			State.Time.OnDayEnd += OnDayEnd;
+		}
+
+		MoneyState GetMoney(Country country) {
+			return Utils.GetOrCreate(country, _moneyStates, () => new MoneyState());
 		}
 
 		public void Add(Country country, string title, Gold gold) {
 			if ( gold.Value == 0 ) {
 				return;
 			}
-			country.Money.Add(title, gold);
-			Debug.WriteLine($"Add {country} money: {gold} ('{title}') = {country.Money.Balance}");
+			var money = GetMoney(country);
+			money.Add(title, gold);
+			Debug.WriteLine($"Add {country} money: {gold} ('{title}') = {money.Balance}");
 		}
 
 		public void Remove(Country country, string title, Gold gold) {
@@ -29,14 +56,14 @@ namespace TheKing.Controllers {
 		}
 
 		void CheckFail(Country country) {
-			if ( country.Money.Balance.Value < 0 ) {
+			if ( GetMoney(country).Balance.Value < 0 ) {
 				State.Country.Remove(country, Content.game_over_money);
 			}
 		}
 
 		void ClearHistory() {
 			foreach ( var country in Countries ) {
-				country.Money.History.Clear();
+				GetMoney(country).History.Clear();
 			}
 		}
 
@@ -47,7 +74,7 @@ namespace TheKing.Controllers {
 		public void Update() {
 			Context.AddCase(
 				Content.bank_balance_request,
-				() => Out.WriteFormat(Content.bank_balance_response, Player.Money.Balance));
+				() => Out.WriteFormat(Content.bank_balance_response, GetMoney(Player).Balance));
 
 			AddCaseIfNonEmpty(Content.income_request,  Content.income_response,  item => item.Gold > Gold.Zero);
 			AddCaseIfNonEmpty(Content.outcome_request, Content.outcome_response, item => item.Gold < Gold.Zero);
@@ -55,7 +82,7 @@ namespace TheKing.Controllers {
 		}
 
 		void AddCaseIfNonEmpty(string request, string response, Func<HistoryItem, bool> selector) {
-			var items = Player.Money.History.Where(selector);
+			var items = GetMoney(Player).History.Where(selector);
 			if ( items.Any() ) {
 				Context.AddCase(
 					request,

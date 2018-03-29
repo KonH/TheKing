@@ -7,7 +7,7 @@ namespace TheKing.Controllers {
 		public ConquestController(GameState state):base(state) { }
 
 		public void Update() {
-			if ( Player.Army.Count > 0 ) {
+			if ( Army.GetCount(Player) > 0 ) {
 				var locs = GetAcceptableLocations();
 				foreach ( var loc in locs ) {
 					var name = loc.Name;
@@ -41,11 +41,11 @@ namespace TheKing.Controllers {
 				OnConquestSuccess(invader, loc);
 			} else {
 				var defender = loc.Owner;
-				var agressorPower = invader.Army.Count;
-				var defenderPower = defender.Army.Count;
+				var agressorPower = Army.GetCount(invader);
+				var defenderPower = Army.GetCount(defender);
 				State.Army.Kill(invader, defenderPower);
 				State.Army.Kill(defender, agressorPower);
-				if ( invader.Army.Count > defender.Army.Count ) {
+				if ( agressorPower > defenderPower ) {
 					OnConquestSuccess(invader, loc);
 				} else {
 					OnConquestFailed(loc);
@@ -56,7 +56,7 @@ namespace TheKing.Controllers {
 
 		void OnConquestSuccess(Country invader, Location loc) {
 			loc.Owner = invader;
-			State.Population.Add(invader, 100);
+			Population.Add(invader, 100);
 			State.Out.WriteFormat(Content.conquest_success, loc.Name);
 		}
 
