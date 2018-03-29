@@ -30,7 +30,7 @@ namespace TheKing.Controllers {
 		Dictionary<Country, MoneyState> _moneyStates = new Dictionary<Country, MoneyState>();
 
 		public MoneyController(GameState state) : base(state) {
-			State.Time.OnDayEnd += OnDayEnd;
+			Time.OnDayEnd += OnDayEnd;
 		}
 
 		MoneyState GetMoney(Country country) {
@@ -57,7 +57,7 @@ namespace TheKing.Controllers {
 
 		void CheckFail(Country country) {
 			if ( GetMoney(country).Balance.Value < 0 ) {
-				State.Country.Remove(country, Content.game_over_money);
+				CountryCtrl.Remove(country, Content.game_over_money);
 			}
 		}
 

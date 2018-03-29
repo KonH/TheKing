@@ -17,8 +17,8 @@ namespace TheKing.Controllers {
 				return new Gold((int)Math.Round(Count * TaxRate));
 			}
 
-			public int TryGrowForDay() {
-				_growthAccum += Count * GrowthRate;
+			public int TryGrowForDay(int locations) {
+				_growthAccum += Count * GrowthRate * locations;
 				var grow = 0;
 				while ( _growthAccum > 1 ) {
 					_growthAccum--;
@@ -32,7 +32,7 @@ namespace TheKing.Controllers {
 		Dictionary<Country, PopulationState> _populationStates = new Dictionary<Country, PopulationState>();
 
 		public PopulationController(GameState state) : base(state) {
-			State.Time.OnDayStart += OnDayStart;
+			Time.OnDayStart += OnDayStart;
 		}
 
 		PopulationState GetPopulation(Country country) {
@@ -56,11 +56,12 @@ namespace TheKing.Controllers {
 		}
 
 		void OnDayStart() {
-			foreach ( var country in State.Country.Countries ) {
+			foreach ( var country in Countries ) {
 				var population = GetPopulation(country);
 				var taxes = population.GetDailyTaxIncome();
 				Money.Add(country, $"{Content.taxes_name} ({population.Count})", taxes);
-				var growCount = population.TryGrowForDay();
+				var locCount = Map.GetCountryLocations(country).Count;
+				var growCount = population.TryGrowForDay(locCount);
 				if ( growCount > 0 ) {
 					Debug.WriteLine($"Grow {country} population: +{growCount} = {population.Count}");
 				}

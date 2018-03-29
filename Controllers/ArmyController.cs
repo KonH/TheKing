@@ -38,7 +38,7 @@ namespace TheKing.Controllers {
 		Dictionary<Country, ArmyState> _armyStates = new Dictionary<Country, ArmyState>();
 
 		public ArmyController(GameState state):base(state) {
-			State.Time.OnDayStart += OnDayStart;
+			Time.OnDayStart += OnDayStart;
 		}
 
 		public void Welcome() {
@@ -52,7 +52,7 @@ namespace TheKing.Controllers {
 			if ( GetAvailableCount(Player) > 0 ) {
 				Context.AddCase(
 					Content.army_conquest_request,
-					() => Context.GoTo(State.Conquest));
+					() => Context.GoTo(Conquest));
 			}
 			Context.AddBackCase();
 		}

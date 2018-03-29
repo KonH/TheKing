@@ -26,9 +26,9 @@ namespace TheKing.Controllers {
 		public MapController(GameState state):base(state) {
 			_locations = new Dictionary<Point, Location>();
 
-			AddLocation(new Location(new Point(0, 0), "Home Planes", State.Country.PlayerCountry));
+			AddLocation(new Location(new Point(0, 0), "Home Planes", Player));
 
-			AddLocation(new Location(new Point(0, 1), "Snow Mountains", State.Country.EnemyCountry));
+			AddLocation(new Location(new Point(0, 1), "Snow Mountains", Enemy));
 			AddLocation(new Location(new Point(0, 2), "North Pole"));
 
 			AddLocation(new Location(new Point(-1, 0), "White Coast"));
@@ -40,7 +40,7 @@ namespace TheKing.Controllers {
 			AddLocation(new Location(new Point(0, -1), "Death Barrens"));
 			AddLocation(new Location(new Point(0, -2), "Great Ocean"));
 
-			State.Country.OnCountryRemoved += (c, r) => RemoveCountry(c);
+			CountryCtrl.OnCountryRemoved += (c, r) => RemoveCountry(c);
 
 			ResetPosition();
 		}

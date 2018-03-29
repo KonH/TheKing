@@ -21,16 +21,16 @@ namespace TheKing.Controllers {
 			}
 			Context.AddCase(
 				Content.go_back,
-				() => State.Context.GoTo(State.Army, false));
+				() => Context.GoTo(Army, false));
 		}
 
 		HashSet<Location> GetAcceptableLocations() {
 			var result = new HashSet<Location>();
-			var playerLocs = State.Map.GetCountryLocations(State.Country.PlayerCountry);
+			var playerLocs = Map.GetCountryLocations(Player);
 			foreach ( var playerLoc in playerLocs ) {
-				var nearLocs = State.Map.GetNearLocations(playerLoc.Point);
+				var nearLocs = Map.GetNearLocations(playerLoc.Point);
 				foreach ( var nearLoc in nearLocs ) {
-					if ( nearLoc.Owner != State.Country.PlayerCountry ) {
+					if ( nearLoc.Owner != Player ) {
 						result.Add(nearLoc);
 					}
 				}
@@ -67,7 +67,7 @@ namespace TheKing.Controllers {
 					OnConquestFailed(loc);
 				}
 			}
-			State.Context.GoTo(State.Army, false);
+			Context.GoTo(Army, false);
 		}
 
 		bool TryDefeat(Country invader, ref IReadOnlySquad invaderSquad, Country defender, ref IReadOnlySquad defenderSquad) {
@@ -80,15 +80,14 @@ namespace TheKing.Controllers {
 
 		void OnConquestSuccess(Country invader, IReadOnlySquad squad, Location loc) {
 			loc.Owner = invader;
-			Population.Add(invader, 100);
 			if ( squad != null ) {
 				Army.ReleaseSquad(invader, squad);
 			}
-			State.Out.WriteFormat(Content.conquest_success, loc.Name);
+			Out.WriteFormat(Content.conquest_success, loc.Name);
 		}
 
 		void OnConquestFailed(Location loc) {
-			State.Out.WriteFormat(Content.conquest_failed, loc.Name);
+			Out.WriteFormat(Content.conquest_failed, loc.Name);
 		}
 	}
 }
