@@ -29,5 +29,9 @@ namespace TheKing.Controllers.Money {
 		public static bool operator <(Gold lhr, Gold rhr) {
 			return lhr.CompareTo(rhr) <= 0;
 		}
+
+		public static Gold operator *(Gold gold, int multiplier) {
+			return new Gold(gold.Value * multiplier);
+		}
 	}
 }

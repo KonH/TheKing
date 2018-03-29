@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TheKing.Controllers.Kingdom;
 using TheKing.Controllers.Map;
 
@@ -7,14 +8,15 @@ namespace TheKing.Controllers {
 		public ConquestController(GameState state):base(state) { }
 
 		public void Update() {
-			if ( Army.GetCount(Player) > 0 ) {
+			if ( Army.GetAvailableCount(Player) > 0 ) {
 				var locs = GetAcceptableLocations();
 				foreach ( var loc in locs ) {
 					var name = loc.Name;
 					if ( loc.Owner != null ) {
 						name += $" ({loc.Owner.Name})";
 					}
-					Context.AddCase(name, () => TryConquest(Player, loc));
+					name += ".";
+					Context.AddCase(name, () => TryStartConquest(loc));
 				}
 			}
 			Context.AddCase(
@@ -36,17 +38,31 @@ namespace TheKing.Controllers {
 			return result;
 		}
 
-		void TryConquest(Country invader, Location loc) {
+		void TryStartConquest(Location location) {
+			var maxCount = Army.GetAvailableCount(Player);
+			Out.WriteFormat(Content.army_conquest_request_2, maxCount);
+			while ( true ) {
+				var count = Input.ReadInt();
+				if ( (count > 0) && (maxCount >= count) ) {
+					Out.Write(Content.army_conquest_response);
+					var squad = Army.TryAquireSquad(Player, count);
+					TryConquest(Player, squad, location);
+					break;
+				}
+			}
+		}
+
+		void TryConquest(Country invader, IReadOnlySquad invaderSquad, Location loc) {
 			if ( loc.Owner == null ) {
-				OnConquestSuccess(invader, loc);
+				OnConquestSuccess(invader, invaderSquad, loc);
 			} else {
 				var defender = loc.Owner;
-				var agressorPower = Army.GetCount(invader);
-				var defenderPower = Army.GetCount(defender);
-				State.Army.Kill(invader, defenderPower);
-				State.Army.Kill(defender, agressorPower);
-				if ( agressorPower > defenderPower ) {
-					OnConquestSuccess(invader, loc);
+				var defenderSquad = Army.AquireMaxSquad(defender);
+				if ( TryDefeat(invader, ref invaderSquad, defender, ref defenderSquad) ) {
+					if ( defenderSquad != null ) {
+						Army.ReleaseSquad(defender, defenderSquad);
+					}
+					OnConquestSuccess(invader, invaderSquad, loc);
 				} else {
 					OnConquestFailed(loc);
 				}
@@ -54,9 +70,20 @@ namespace TheKing.Controllers {
 			State.Context.GoTo(State.Army, false);
 		}
 
-		void OnConquestSuccess(Country invader, Location loc) {
+		bool TryDefeat(Country invader, ref IReadOnlySquad invaderSquad, Country defender, ref IReadOnlySquad defenderSquad) {
+			var agressorPower = invaderSquad.Count;
+			var defenderPower = defenderSquad.Count;
+			defenderSquad = Army.KillInSquad(defender, defenderSquad, agressorPower);
+			invaderSquad = Army.KillInSquad(invader, invaderSquad, defenderPower);
+			return defenderSquad == null;
+		}
+
+		void OnConquestSuccess(Country invader, IReadOnlySquad squad, Location loc) {
 			loc.Owner = invader;
 			Population.Add(invader, 100);
+			if ( squad != null ) {
+				Army.ReleaseSquad(invader, squad);
+			}
 			State.Out.WriteFormat(Content.conquest_success, loc.Name);
 		}
 

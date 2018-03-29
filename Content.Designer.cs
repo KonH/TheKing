@@ -70,6 +70,24 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How many people we need to send? (max: {0}).
+        /// </summary>
+        internal static string army_conquest_request_2 {
+            get {
+                return ResourceManager.GetString("army_conquest_request_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The army is on the way!.
+        /// </summary>
+        internal static string army_conquest_response {
+            get {
+                return ResourceManager.GetString("army_conquest_response", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Army.
         /// </summary>
         internal static string army_name {

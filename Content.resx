@@ -213,4 +213,10 @@
   <data name="conquest_success" xml:space="preserve">
     <value>Our army has captured {0}.</value>
   </data>
+  <data name="army_conquest_request_2" xml:space="preserve">
+    <value>How many people we need to send? (max: {0})</value>
+  </data>
+  <data name="army_conquest_response" xml:space="preserve">
+    <value>The army is on the way!</value>
+  </data>
 </root>
