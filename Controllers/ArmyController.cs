@@ -1,4 +1,6 @@
-﻿using TheKing.Controllers.Kingdom;
+﻿using System;
+using System.Diagnostics;
+using TheKing.Controllers.Kingdom;
 
 namespace TheKing.Controllers {
 	class ArmyController : StateController, IUpdateHandler, IWelcomeHandler {
@@ -34,9 +36,15 @@ namespace TheKing.Controllers {
 			}
 		}
 
-		void Recruit(Country country, int count) {
+		public void Recruit(Country country, int count) {
 			State.Population.Remove(country, count);
 			country.Army.Count += count;
+			Debug.WriteLine($"Recruit {country} army: +{count} = {country.Army.Count}");
+		}
+
+		public void Kill(Country country, int count) {
+			country.Army.Count = Math.Max(country.Army.Count - count, 0);
+			Debug.WriteLine($"Kill {country} army: -{count} = {country.Army.Count}");
 		}
 
 		void OnDayStart() {

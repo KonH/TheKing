@@ -142,6 +142,24 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Our army failed to capture {0}..
+        /// </summary>
+        internal static string conquest_failed {
+            get {
+                return ResourceManager.GetString("conquest_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our army has captured {0}..
+        /// </summary>
+        internal static string conquest_success {
+            get {
+                return ResourceManager.GetString("conquest_success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your treasury is empty..
         /// </summary>
         internal static string game_over_money {

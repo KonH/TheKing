@@ -7,13 +7,15 @@ namespace TheKing.Controllers {
 		public ConquestController(GameState state):base(state) { }
 
 		public void Update() {
-			var locs = GetAcceptableLocations();
-			foreach ( var loc in locs ) {
-				var name = loc.Name;
-				if ( loc.Owner != null ) {
-					name += $" ({loc.Owner.Name})";
+			if ( Player.Army.Count > 0 ) {
+				var locs = GetAcceptableLocations();
+				foreach ( var loc in locs ) {
+					var name = loc.Name;
+					if ( loc.Owner != null ) {
+						name += $" ({loc.Owner.Name})";
+					}
+					Context.AddCase(name, () => TryConquest(Player, loc));
 				}
-				Context.AddCase(name, () => TryConquest(Player, loc));
 			}
 			Context.AddCase(
 				Content.go_back,
@@ -34,9 +36,32 @@ namespace TheKing.Controllers {
 			return result;
 		}
 
-		void TryConquest(Country country, Location loc) {
-			loc.Owner = country;
-			State.Population.Add(country, 100);
+		void TryConquest(Country invader, Location loc) {
+			if ( loc.Owner == null ) {
+				OnConquestSuccess(invader, loc);
+			} else {
+				var defender = loc.Owner;
+				var agressorPower = invader.Army.Count;
+				var defenderPower = defender.Army.Count;
+				State.Army.Kill(invader, defenderPower);
+				State.Army.Kill(defender, agressorPower);
+				if ( invader.Army.Count > defender.Army.Count ) {
+					OnConquestSuccess(invader, loc);
+				} else {
+					OnConquestFailed(loc);
+				}
+			}
+			State.Context.GoTo(State.Army, false);
+		}
+
+		void OnConquestSuccess(Country invader, Location loc) {
+			loc.Owner = invader;
+			State.Population.Add(invader, 100);
+			State.Out.WriteFormat(Content.conquest_success, loc.Name);
+		}
+
+		void OnConquestFailed(Location loc) {
+			State.Out.WriteFormat(Content.conquest_failed, loc.Name);
 		}
 	}
 }
