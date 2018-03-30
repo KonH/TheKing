@@ -24,15 +24,14 @@ namespace TheKing.New {
 		}
 	}
 
+	enum Direction {
+		North,
+		East,
+		South,
+		West,
+	}
+
 	class MapController {
-
-		enum Direction {
-			North,
-			East,
-			South,
-			West,
-		}
-
 		Direction[] AllDirections = {
 			Direction.North,
 			Direction.East,
@@ -40,7 +39,6 @@ namespace TheKing.New {
 			Direction.West,
 		};
 
-		Point                       _position;
 		Dictionary<Point, Location> _locations;
 
 		public MapController(CountryController country) {
@@ -61,16 +59,10 @@ namespace TheKing.New {
 			AddLocation(new Location(new Point(0, -2), "Great Ocean"));
 
 			country.OnCountryRemoved += (c, r) => RemoveCountry(c);
-
-			ResetPosition();
 		}
 
 		void AddLocation(Location loc) {
 			_locations.Add(loc.Point, loc);
-		}
-
-		void ResetPosition() {
-			_position = new Point(0, 0);
 		}
 
 		void RemoveCountry(Country c) {
@@ -81,18 +73,22 @@ namespace TheKing.New {
 			}
 		}
 
-		Location GetLocationAt(Point pos) {
+		public Direction[] GetDirections() {
+			return AllDirections;
+		}
+
+		public Location GetLocationAt(Point pos) {
 			if ( _locations.TryGetValue(pos, out var loc) ) {
 				return loc;
 			}
 			return null;
 		}
 
-		Location GetLocationAt(Point pos, Direction dir) {
+		public Location GetLocationAt(Point pos, Direction dir) {
 			return GetLocationAt(TransformPoint(pos, dir));
 		}
 
-		Point TransformPoint(Point p, Direction dir) {
+		public Point TransformPoint(Point p, Direction dir) {
 			switch ( dir ) {
 				case Direction.North: return new Point(p.X    , p.Y + 1);
 				case Direction.East : return new Point(p.X + 1, p.Y    );

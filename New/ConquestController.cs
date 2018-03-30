@@ -6,9 +6,10 @@
 			_army = army;
 		}
 
-		public void TryConquest(Country invader, IReadOnlySquad invaderSquad, Location loc) {
+		public bool TryConquest(Country invader, IReadOnlySquad invaderSquad, Location loc) {
 			if ( loc.Owner == null ) {
 				OnConquestSuccess(invader, invaderSquad, loc);
+				return true;
 			} else {
 				var defender = loc.Owner;
 				var defenderSquad = _army.AquireMaxSquad(defender);
@@ -17,8 +18,10 @@
 						_army.ReleaseSquad(defender, defenderSquad);
 					}
 					OnConquestSuccess(invader, invaderSquad, loc);
+					return true;
 				}
 			}
+			return false;
 		}
 
 		bool TryDefeat(Country invader, ref IReadOnlySquad invaderSquad, Country defender, ref IReadOnlySquad defenderSquad) {

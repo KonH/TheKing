@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace TheKing.New {
+	interface ICountryHandler {
+		void OnCountryRemoved(Country country, string reason);
+	}
+
 	enum RaceId {
 		Human,
 		Goblin
@@ -40,7 +44,7 @@ namespace TheKing.New {
 
 		public List<Country> Countries => new List<Country>(_countries);
 
-		public Action<Country, string> OnCountryRemoved = new Action<Country, string>((c, s) => { });
+		public event Action<Country, string> OnCountryRemoved = new Action<Country, string>((c, s) => { });
 
 		List<Country> _countries = new List<Country>();
 

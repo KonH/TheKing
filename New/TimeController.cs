@@ -2,7 +2,11 @@
 using System.Diagnostics;
 
 namespace TheKing.New {
-	class Date {
+	interface IDayStarter {
+		void OnDayStart();
+	}
+
+	struct Date {
 		public int Day   { get; }
 		public int Month { get; }
 		public int Year  { get; }
@@ -34,13 +38,16 @@ namespace TheKing.New {
 			}
 			return new Date(newDay, newMonth, newYear);
 		}
+
+		public bool IsEquals(Date other) {
+			return TotalDays == other.TotalDays;
+		}
 	}
 
 	class TimeController {
 		public Date CurDate { get; private set; } = new Date(1, 1, 1);
 
-		public Action OnDayStart = new Action(() => { });
-		public Action OnDayEnd   = new Action(() => { });
+		public event Action OnDayStart = new Action(() => { });
 
 		public void FirstDay() {
 			FireDayStart();
@@ -55,11 +62,11 @@ namespace TheKing.New {
 		void FireDayStart() {
 			Debug.WriteLine($"Start of the day: {CurDate}");
 			OnDayStart.Invoke();
+			
 		}
 
 		void FireDayEnd() {
 			Debug.WriteLine($"End of the day: {CurDate}");
-			OnDayEnd.Invoke();
 		}
 	}
 }

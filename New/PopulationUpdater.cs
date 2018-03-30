@@ -1,21 +1,18 @@
-﻿using System.Diagnostics;
-
-namespace TheKing.New {
-	class PopulationUpdater {
+﻿namespace TheKing.New {
+	class PopulationUpdater : IDayStarter {
 		CountryController    _country;
 		PopulationController _population;
 		MoneyController      _money;
 		MapController        _map;
 
-		public PopulationUpdater(TimeController time, CountryController country, PopulationController population, MoneyController money, MapController map) {
+		public PopulationUpdater(CountryController country, PopulationController population, MoneyController money, MapController map) {
 			_country    = country;
 			_population = population;
 			_money      = money;
 			_map        = map;
-			time.OnDayStart += OnDayStart;
 		}
 
-		void OnDayStart() {
+		public void OnDayStart() {
 			// TODO:
 			/*foreach ( var country in _country.Countries ) {
 				var population = _population.GetPopulation(country);

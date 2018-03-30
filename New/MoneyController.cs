@@ -1,19 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace TheKing.New {
-	class MoneyController {
-		class HistoryItem {
-			public Date   Date  { get; }
-			public string Title { get; }
-			public Gold   Gold  { get; }
+	class HistoryItem {
+		public Date   Date  { get; }
+		public string Title { get; }
+		public Gold   Gold  { get; }
 
-			public HistoryItem(Date date, string title, Gold value) {
-				Title = title;
-				Gold  = value;
-			}
+		public HistoryItem(Date date, string title, Gold value) {
+			Title = title;
+			Gold  = value;
 		}
+	}
 
+	class MoneyController {
 		class MoneyState {
 			public Gold              Balance { get; private set; } = new Gold();
 			public List<HistoryItem> History { get; private set; } = new List<HistoryItem>();
@@ -36,6 +38,27 @@ namespace TheKing.New {
 
 		MoneyState GetMoney(Country country) {
 			return Utils.GetOrCreate(country, _moneyStates, () => new MoneyState());
+		}
+
+		public Gold GetBalance(Country country) {
+			return GetMoney(country).Balance;
+		}
+
+		public List<HistoryItem> GetIncome(Country country, Date date) {
+			return GetHistoryItems(country, date, item => item.Gold > Gold.Zero);
+		}
+
+
+
+		public List<HistoryItem> GetExpenses(Country country, Date date) {
+			return GetHistoryItems(country, date, item => item.Gold < Gold.Zero);
+		}
+
+		List<HistoryItem> GetHistoryItems(Country country, Date date, Func<HistoryItem, bool> selector) {
+			var items = GetMoney(country).History.
+				Where(it => it.Date.IsEquals(date)).
+				Where(selector);
+			return items.ToList();
 		}
 
 		public void Add(Country country, string title, Gold gold) {
