@@ -592,6 +592,24 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to dwarfs.
+        /// </summary>
+        internal static string race_Dwarf {
+            get {
+                return ResourceManager.GetString("race_Dwarf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to elfs.
+        /// </summary>
+        internal static string race_Elf {
+            get {
+                return ResourceManager.GetString("race_Elf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to goblins.
         /// </summary>
         internal static string race_Goblin {
@@ -601,11 +619,29 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to halflings.
+        /// </summary>
+        internal static string race_Halfling {
+            get {
+                return ResourceManager.GetString("race_Halfling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to humans.
         /// </summary>
         internal static string race_Human {
             get {
                 return ResourceManager.GetString("race_Human", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to orcs.
+        /// </summary>
+        internal static string race_Orc {
+            get {
+                return ResourceManager.GetString("race_Orc", resourceCulture);
             }
         }
         

@@ -42,7 +42,8 @@ namespace TheKing.Interfaces {
 					var name = targetLoc.Name;
 					if ( _discovery.IsDiscovered(player, targetLoc) ) {
 						if ( targetLoc.Owner != null ) {
-							name += $" ({targetLoc.Owner.Name})";
+							var raceName = Content.ResourceManager.GetString("race_" + targetLoc.Owner.Kind.Id);
+							name += $" ({targetLoc.Owner.Name}, {raceName})";
 						}
 					} else {
 						name += " (?)";
@@ -63,8 +64,17 @@ namespace TheKing.Interfaces {
 			foreach ( var playerLoc in countryLocs ) {
 				var nearLocs = _map.GetNearLocations(playerLoc.Point);
 				foreach ( var nearLoc in nearLocs ) {
-					if ( nearLoc.Reachable && (nearLoc.Owner != country) ) {
-						result.Add(Tuple.Create(playerLoc, nearLoc));
+					if ( nearLoc.Reachable && _conquest.CanConquest(country, nearLoc) ) {
+						var alreadyAdded = false;
+						foreach ( var item in result ) {
+							if ( item.Item2 == nearLoc ) {
+								alreadyAdded = true;
+								break;
+							}
+						}
+						if ( !alreadyAdded ) {
+							result.Add(Tuple.Create(playerLoc, nearLoc));
+						}
 					}
 				}
 			}

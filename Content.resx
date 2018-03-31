@@ -309,6 +309,18 @@
   <data name="loc_prefixes_Woods" xml:space="preserve">
     <value>Red;Green;Yellow;Great;Wild;Dark</value>
   </data>
+  <data name="race_Dwarf" xml:space="preserve">
+    <value>dwarfs</value>
+  </data>
+  <data name="race_Elf" xml:space="preserve">
+    <value>elfs</value>
+  </data>
+  <data name="race_Halfling" xml:space="preserve">
+    <value>halflings</value>
+  </data>
+  <data name="race_Orc" xml:space="preserve">
+    <value>orcs</value>
+  </data>
   <data name="win_conquest" xml:space="preserve">
     <value>You have destroyed all other countries.</value>
   </data>

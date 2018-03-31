@@ -19,6 +19,13 @@ namespace TheKing.Controllers {
 			_move      = move;
 		}
 
+		public bool CanConquest(Country country, Location location) {
+			if ( location.Owner != country ) {
+				return !_move.HasRoute(country, location);
+			}
+			return false;
+		}
+
 		public void StartConquest(
 			Country invader, IReadOnlySquad invaderSquad, Location homeLoc, Location targetLoc, Action<ConquestResult, Location> onComplete
 		) {
