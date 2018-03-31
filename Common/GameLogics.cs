@@ -50,6 +50,7 @@ namespace TheKing.Common {
 		}
 
 		public void OnDayStart() {
+			_out.Write();
 			_out.WriteFormat(Content.time_report, _time.CurDate);
 			_out.Write();
 		}

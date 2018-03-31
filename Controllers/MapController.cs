@@ -17,19 +17,19 @@ namespace TheKing.Controllers {
 		public MapController(CountryController country) {
 			_locations = new Dictionary<Point, Location>();
 
-			AddLocation(new Location(new Point(0, 0), "Home Planes", country.PlayerCountry));
+			AddLocation(new Location(new Point(0, 0), "Home Planes", true, 0, 2, country.PlayerCountry));
 
-			AddLocation(new Location(new Point(0, 1), "Snow Mountains", country.EnemyCountry));
-			AddLocation(new Location(new Point(0, 2), "North Pole"));
+			AddLocation(new Location(new Point(0, 1), "Snow Mountains", true, 0.25f, 4, country.EnemyCountry));
+			AddLocation(new Location(new Point(0, 2), "North Pole", true, 0.95f, 8));
 
-			AddLocation(new Location(new Point(-1, 0), "White Coast"));
-			AddLocation(new Location(new Point(-2, 0), "Great Ocean"));
+			AddLocation(new Location(new Point(-1, 0), "White Coast", true, 0.33f, 3));
+			AddLocation(new Location(new Point(-2, 0), "Great Ocean", false, 0, 0));
 
-			AddLocation(new Location(new Point(1, 0), "Wild Forests"));
-			AddLocation(new Location(new Point(2, 0), "Great Ocean"));
+			AddLocation(new Location(new Point(1, 0), "Wild Forests", true, 0.33f, 3));
+			AddLocation(new Location(new Point(2, 0), "Great Ocean", false , 0, 0));
 
-			AddLocation(new Location(new Point(0, -1), "Death Barrens"));
-			AddLocation(new Location(new Point(0, -2), "Great Ocean"));
+			AddLocation(new Location(new Point(0, -1), "Death Barrens", true, 0.33f, 3));
+			AddLocation(new Location(new Point(0, -2), "Great Ocean", false, 0, 0));
 
 			country.OnCountryRemoved += (c, r) => RemoveCountry(c);
 		}

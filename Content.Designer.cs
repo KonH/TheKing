@@ -160,7 +160,7 @@ namespace TheKing {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Our army failed to capture {0}..
+        ///   Looks up a localized string similar to Our army failed to capture {0}. We lost {1} soldiers on march and {2} in battle..
         /// </summary>
         internal static string conquest_failed {
             get {
@@ -169,7 +169,7 @@ namespace TheKing {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Our army has captured {0}..
+        ///   Looks up a localized string similar to Our army has captured {0}. We lost {1} soldiers on march and {2} in battle..
         /// </summary>
         internal static string conquest_success {
             get {

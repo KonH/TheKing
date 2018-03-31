@@ -65,6 +65,7 @@ namespace TheKing {
 				.AddSingleton<ArmyController>()
 				.AddSingleton<ConquestController>()
 				.AddSingleton<DiscoveryController>()
+				.AddSingleton<MoveController>()
 				.AddSingleton<IDayStarter, ArmyUpdater>()
 				.AddSingleton<IDayStarter, PopulationUpdater>()
 				.AddSingleton<IStartHandler, MapInterface>()

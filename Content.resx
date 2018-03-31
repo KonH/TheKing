@@ -208,10 +208,10 @@
     <value>Back.</value>
   </data>
   <data name="conquest_failed" xml:space="preserve">
-    <value>Our army failed to capture {0}.</value>
+    <value>Our army failed to capture {0}. We lost {1} soldiers on march and {2} in battle.</value>
   </data>
   <data name="conquest_success" xml:space="preserve">
-    <value>Our army has captured {0}.</value>
+    <value>Our army has captured {0}. We lost {1} soldiers on march and {2} in battle.</value>
   </data>
   <data name="army_conquest_request_2" xml:space="preserve">
     <value>How many people we need to send? (max: {0})</value>

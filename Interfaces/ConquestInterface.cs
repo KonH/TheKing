@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TheKing.Controllers;
 using TheKing.Features.Map;
-using TheKing.Features.Army;
 using TheKing.Features.Context;
+using TheKing.Features.Conquest;
 using TheKing.Features.Countries;
 
 namespace TheKing.Interfaces {
@@ -34,18 +35,20 @@ namespace TheKing.Interfaces {
 		public void Update() {
 			var player = _country.PlayerCountry;
 			if ( _army.GetAvailableCount(player) > 0 ) {
-				var locs = GetAcceptableLocations(player);
-				foreach ( var loc in locs ) {
-					var name = loc.Name;
-					if ( _discovery.IsDiscovered(player, loc) ) {
-						if ( loc.Owner != null ) {
-							name += $" ({loc.Owner.Name})";
+				var locPairs = GetAcceptableLocations(player);
+				foreach ( var pair in locPairs ) {
+					var homeLoc = pair.Item1;
+					var targetLoc = pair.Item2;
+					var name = targetLoc.Name;
+					if ( _discovery.IsDiscovered(player, targetLoc) ) {
+						if ( targetLoc.Owner != null ) {
+							name += $" ({targetLoc.Owner.Name})";
 						}
 					} else {
 						name += " (?)";
 					}
 					name += ".";
-					_context.AddCase(name, () => TryStartConquest(loc, player));
+					_context.AddCase(name, () => TryStartConquest(homeLoc, targetLoc, player));
 				}
 			}
 
@@ -54,21 +57,21 @@ namespace TheKing.Interfaces {
 				() => _context.GoToRelatedContext<ArmyController>());
 		}
 
-		HashSet<Location> GetAcceptableLocations(Country country) {
-			var result = new HashSet<Location>();
+		HashSet<Tuple<Location, Location>> GetAcceptableLocations(Country country) {
+			var result = new HashSet<Tuple<Location, Location>>();
 			var countryLocs = _map.GetCountryLocations(country);
 			foreach ( var playerLoc in countryLocs ) {
 				var nearLocs = _map.GetNearLocations(playerLoc.Point);
 				foreach ( var nearLoc in nearLocs ) {
-					if ( nearLoc.Owner != country ) {
-						result.Add(nearLoc);
+					if ( nearLoc.Reachable && (nearLoc.Owner != country) ) {
+						result.Add(Tuple.Create(playerLoc, nearLoc));
 					}
 				}
 			}
 			return result;
 		}
 
-		void TryStartConquest(Location location, Country country) {
+		void TryStartConquest(Location homeLoc, Location targetLoc, Country country) {
 			var maxCount = _army.GetAvailableCount(country);
 			_out.WriteFormat(Content.army_conquest_request_2, maxCount);
 			while ( true ) {
@@ -76,30 +79,18 @@ namespace TheKing.Interfaces {
 				if ( (count > 0) && (maxCount >= count) ) {
 					_out.Write(Content.army_conquest_response);
 					var squad = _army.TryAquireSquad(country, count);
-					TryConquest(country, squad, location);
+					_conquest.StartConquest(country, squad, homeLoc, targetLoc, OnConquestComplete);
 					break;
 				}
 			}
 		}
 
-		void TryConquest(Country invader, IReadOnlySquad invaderSquad, Location loc) {
-			if ( _conquest.TryConquest(invader, invaderSquad, loc) ) {
-				OnConquestSuccess(loc);
+		void OnConquestComplete(ConquestResult result, Location loc) {
+			if ( result.Success ) {
+				_out.WriteFormat(Content.conquest_success, loc.Name, result.Move.Loses, result.Loses);
 			} else {
-				OnConquestFailed(loc);
+				_out.WriteFormat(Content.conquest_failed, loc.Name, result.Move.Loses, result.Loses);
 			}
-
-			_context.AddCase(
-				Content.go_back,
-				() => _context.GoToRelatedContext<ArmyController>());
-		}
-
-		void OnConquestSuccess(Location loc) {
-			_out.WriteFormat(Content.conquest_success, loc.Name);
-		}
-
-		void OnConquestFailed(Location loc) {
-			_out.WriteFormat(Content.conquest_failed, loc.Name);
 		}
 	}
 }
