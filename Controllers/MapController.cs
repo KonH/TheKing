@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using TheKing.Generators;
 using TheKing.Features.Map;
 using TheKing.Features.Countries;
 
@@ -16,24 +17,10 @@ namespace TheKing.Controllers {
 
 		Dictionary<Point, Location> _locations;
 
-		public MapController(CountryController country) {
+		public MapController(CountryController country, MapGenerator mapGen) {
 			_country = country;
 
-			_locations = new Dictionary<Point, Location>();
-
-			AddLocation(new Location(new Point(0, 0), "Home Planes", true, 0, 2, country.PlayerCountry));
-
-			AddLocation(new Location(new Point(0, 1), "Snow Mountains", true, 0.25f, 4, country.EnemyCountry));
-			AddLocation(new Location(new Point(0, 2), "North Pole", true, 0.95f, 8));
-
-			AddLocation(new Location(new Point(-1, 0), "White Coast", true, 0.33f, 3));
-			AddLocation(new Location(new Point(-2, 0), "Great Ocean", false, 0, 0));
-
-			AddLocation(new Location(new Point(1, 0), "Wild Forests", true, 0.33f, 3));
-			AddLocation(new Location(new Point(2, 0), "Great Ocean", false , 0, 0));
-
-			AddLocation(new Location(new Point(0, -1), "Death Barrens", true, 0.33f, 3));
-			AddLocation(new Location(new Point(0, -2), "Great Ocean", false, 0, 0));
+			_locations = new Dictionary<Point, Location>(mapGen.Locations);
 
 			country.OnCountryRemoved += (c, r) => RemoveCountry(c);
 		}

@@ -178,6 +178,168 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Un;Ro;Gren;Bee.
+        /// </summary>
+        internal static string country_Dwarf_0 {
+            get {
+                return ResourceManager.GetString("country_Dwarf_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to do;re;bi;man;dex.
+        /// </summary>
+        internal static string country_Dwarf_1 {
+            get {
+                return ResourceManager.GetString("country_Dwarf_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to tan;un;ash;din;fon;.
+        /// </summary>
+        internal static string country_Dwarf_2 {
+            get {
+                return ResourceManager.GetString("country_Dwarf_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mala;Ula;Tila;Cala.
+        /// </summary>
+        internal static string country_Elf_0 {
+            get {
+                return ResourceManager.GetString("country_Elf_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ki;ni;no;ra;ro;la.
+        /// </summary>
+        internal static string country_Elf_1 {
+            get {
+                return ResourceManager.GetString("country_Elf_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to don;nia;mia;kia;nia.
+        /// </summary>
+        internal static string country_Elf_2 {
+            get {
+                return ResourceManager.GetString("country_Elf_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ug;Sha;Wi;Gr&apos;;Br&apos;;Hr&apos;;Br;Her.
+        /// </summary>
+        internal static string country_Goblin_0 {
+            get {
+                return ResourceManager.GetString("country_Goblin_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to twa;nwa;mwa;hn;bn;tn;fn.
+        /// </summary>
+        internal static string country_Goblin_1 {
+            get {
+                return ResourceManager.GetString("country_Goblin_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to bon;van;an;&apos;n;man;han.
+        /// </summary>
+        internal static string country_Goblin_2 {
+            get {
+                return ResourceManager.GetString("country_Goblin_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bre;Fri;Ita;Osa;Lisa;Was;Mes.
+        /// </summary>
+        internal static string country_Halfling_0 {
+            get {
+                return ResourceManager.GetString("country_Halfling_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to;ma;mo;li;ni;za.
+        /// </summary>
+        internal static string country_Halfling_1 {
+            get {
+                return ResourceManager.GetString("country_Halfling_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to nia;ton;lia;mia;tia.
+        /// </summary>
+        internal static string country_Halfling_2 {
+            get {
+                return ResourceManager.GetString("country_Halfling_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bre;Fri;Ita;Osa;Lisa;Was;Mes.
+        /// </summary>
+        internal static string country_Human_0 {
+            get {
+                return ResourceManager.GetString("country_Human_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to;ma;mo;li;ni;za.
+        /// </summary>
+        internal static string country_Human_1 {
+            get {
+                return ResourceManager.GetString("country_Human_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to nia;ton;lia;mia;tia.
+        /// </summary>
+        internal static string country_Human_2 {
+            get {
+                return ResourceManager.GetString("country_Human_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ug;Sha;Wi;Gr&apos;;Br&apos;;Hr&apos;;Br;Her.
+        /// </summary>
+        internal static string country_Orc_0 {
+            get {
+                return ResourceManager.GetString("country_Orc_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to twa;nwa;mwa;hn;bn;tn;fn.
+        /// </summary>
+        internal static string country_Orc_1 {
+            get {
+                return ResourceManager.GetString("country_Orc_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to bon;van;an;&apos;n;man;han.
+        /// </summary>
+        internal static string country_Orc_2 {
+            get {
+                return ResourceManager.GetString("country_Orc_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You lands are captured..
         /// </summary>
         internal static string game_over_locations {
@@ -300,6 +462,96 @@ namespace TheKing {
         internal static string income_response {
             get {
                 return ResourceManager.GetString("income_response", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Barrens;Wasteland;Heathlands.
+        /// </summary>
+        internal static string loc_names_Barrens {
+            get {
+                return ResourceManager.GetString("loc_names_Barrens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lands;Fields;Meadows.
+        /// </summary>
+        internal static string loc_names_Lands {
+            get {
+                return ResourceManager.GetString("loc_names_Lands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mountains;Peaks;Hills.
+        /// </summary>
+        internal static string loc_names_Mountains {
+            get {
+                return ResourceManager.GetString("loc_names_Mountains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sea;Ocean.
+        /// </summary>
+        internal static string loc_names_Sea {
+            get {
+                return ResourceManager.GetString("loc_names_Sea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Woods;Forest.
+        /// </summary>
+        internal static string loc_names_Woods {
+            get {
+                return ResourceManager.GetString("loc_names_Woods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Red;Great;Cold;White;Black;Dark.
+        /// </summary>
+        internal static string loc_prefixes_Barrens {
+            get {
+                return ResourceManager.GetString("loc_prefixes_Barrens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Red;Fruitful;Green;Great.
+        /// </summary>
+        internal static string loc_prefixes_Lands {
+            get {
+                return ResourceManager.GetString("loc_prefixes_Lands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Great;High;Cold;Snow;Red;Black;Dark.
+        /// </summary>
+        internal static string loc_prefixes_Mountains {
+            get {
+                return ResourceManager.GetString("loc_prefixes_Mountains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Red;White;Blue;Yellow;Deep;Cold;Great.
+        /// </summary>
+        internal static string loc_prefixes_Sea {
+            get {
+                return ResourceManager.GetString("loc_prefixes_Sea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Red;Green;Yellow;Great;Wild;Dark.
+        /// </summary>
+        internal static string loc_prefixes_Woods {
+            get {
+                return ResourceManager.GetString("loc_prefixes_Woods", resourceCulture);
             }
         }
         

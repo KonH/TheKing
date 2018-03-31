@@ -1,7 +1,9 @@
-﻿using TheKing.Controllers;
+﻿using System.Linq;
+using TheKing.Controllers;
 using TheKing.Features.Map;
 using TheKing.Features.Context;
 using TheKing.Features.Countries;
+using System.Diagnostics;
 
 namespace TheKing.Interfaces {
 	class MapInterface : IUpdateHandler, IStartHandler {
@@ -21,6 +23,7 @@ namespace TheKing.Interfaces {
 			_discovery = discovery;
 			_out       = output;
 			_context   = context;
+			ResetPosition();
 		}
 
 		public void OnStart() {
@@ -28,6 +31,8 @@ namespace TheKing.Interfaces {
 		}
 
 		public void Update() {
+			Debug.WriteLine($"Alive countries: {_country.Countries.Count}");
+
 			var curLocation = _map.GetLocationAt(_position);
 			DescribeLocation(_country.PlayerCountry, curLocation);
 
@@ -41,7 +46,12 @@ namespace TheKing.Interfaces {
 				}
 			}
 
-			_context.AddBackCaseWith(() => _position = new Point(0, 0));
+			_context.AddBackCaseWith(() => ResetPosition());
+		}
+
+		void ResetPosition() {
+			var firstLocation = _map.GetCountryLocations(_country.PlayerCountry).First();
+			_position = firstLocation.Point;
 		}
 
 		void DescribeLocation(Country country, Location loc) {

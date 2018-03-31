@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using TheKing.Generators;
 using TheKing.Features.Countries;
 
 namespace TheKing.Controllers {
 	class CountryController {
-		public Country PlayerCountry { get; } = new Country("YourKingdom", new Race(RaceId.Human), true);
-		public Country EnemyCountry  { get; } = new Country("Goblington", new Race(RaceId.Goblin), false);
+		public Country PlayerCountry => _countries.Find(c => c.Player);
 
 		public List<Country> Countries => new List<Country>(_countries);
 
@@ -14,9 +14,8 @@ namespace TheKing.Controllers {
 
 		List<Country> _countries = new List<Country>();
 
-		public CountryController() {
-			_countries.Add(PlayerCountry);
-			_countries.Add(EnemyCountry);
+		public CountryController(CountryGenerator generator) {
+			_countries.AddRange(generator.Countries);
 		}
 
 		public void Remove(Country country, string reason) {

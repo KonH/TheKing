@@ -225,4 +225,88 @@
   <data name="game_over_locations" xml:space="preserve">
     <value>You lands are captured.</value>
   </data>
+  <data name="country_Dwarf_0" xml:space="preserve">
+    <value>Un;Ro;Gren;Bee</value>
+  </data>
+  <data name="country_Dwarf_1" xml:space="preserve">
+    <value>do;re;bi;man;dex</value>
+  </data>
+  <data name="country_Dwarf_2" xml:space="preserve">
+    <value>tan;un;ash;din;fon;</value>
+  </data>
+  <data name="country_Elf_0" xml:space="preserve">
+    <value>Mala;Ula;Tila;Cala</value>
+  </data>
+  <data name="country_Elf_1" xml:space="preserve">
+    <value>ki;ni;no;ra;ro;la</value>
+  </data>
+  <data name="country_Elf_2" xml:space="preserve">
+    <value>don;nia;mia;kia;nia</value>
+  </data>
+  <data name="country_Goblin_0" xml:space="preserve">
+    <value>Ug;Sha;Wi;Gr';Br';Hr';Br;Her</value>
+  </data>
+  <data name="country_Goblin_1" xml:space="preserve">
+    <value>twa;nwa;mwa;hn;bn;tn;fn</value>
+  </data>
+  <data name="country_Goblin_2" xml:space="preserve">
+    <value>bon;van;an;'n;man;han</value>
+  </data>
+  <data name="country_Halfling_0" xml:space="preserve">
+    <value>Bre;Fri;Ita;Osa;Lisa;Was;Mes</value>
+  </data>
+  <data name="country_Halfling_1" xml:space="preserve">
+    <value>to;ma;mo;li;ni;za</value>
+  </data>
+  <data name="country_Halfling_2" xml:space="preserve">
+    <value>nia;ton;lia;mia;tia</value>
+  </data>
+  <data name="country_Human_0" xml:space="preserve">
+    <value>Bre;Fri;Ita;Osa;Lisa;Was;Mes</value>
+  </data>
+  <data name="country_Human_1" xml:space="preserve">
+    <value>to;ma;mo;li;ni;za</value>
+  </data>
+  <data name="country_Human_2" xml:space="preserve">
+    <value>nia;ton;lia;mia;tia</value>
+  </data>
+  <data name="country_Orc_0" xml:space="preserve">
+    <value>Ug;Sha;Wi;Gr';Br';Hr';Br;Her</value>
+  </data>
+  <data name="country_Orc_1" xml:space="preserve">
+    <value>twa;nwa;mwa;hn;bn;tn;fn</value>
+  </data>
+  <data name="country_Orc_2" xml:space="preserve">
+    <value>bon;van;an;'n;man;han</value>
+  </data>
+  <data name="loc_names_Barrens" xml:space="preserve">
+    <value>Barrens;Wasteland;Heathlands</value>
+  </data>
+  <data name="loc_names_Lands" xml:space="preserve">
+    <value>Lands;Fields;Meadows</value>
+  </data>
+  <data name="loc_names_Mountains" xml:space="preserve">
+    <value>Mountains;Peaks;Hills</value>
+  </data>
+  <data name="loc_names_Sea" xml:space="preserve">
+    <value>Sea;Ocean</value>
+  </data>
+  <data name="loc_names_Woods" xml:space="preserve">
+    <value>Woods;Forest</value>
+  </data>
+  <data name="loc_prefixes_Barrens" xml:space="preserve">
+    <value>Red;Great;Cold;White;Black;Dark</value>
+  </data>
+  <data name="loc_prefixes_Lands" xml:space="preserve">
+    <value>Red;Fruitful;Green;Great</value>
+  </data>
+  <data name="loc_prefixes_Mountains" xml:space="preserve">
+    <value>Great;High;Cold;Snow;Red;Black;Dark</value>
+  </data>
+  <data name="loc_prefixes_Sea" xml:space="preserve">
+    <value>Red;White;Blue;Yellow;Deep;Cold;Great</value>
+  </data>
+  <data name="loc_prefixes_Woods" xml:space="preserve">
+    <value>Red;Green;Yellow;Great;Wild;Dark</value>
+  </data>
 </root>

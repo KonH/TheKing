@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using TheKing.Common;
 using TheKing.Handlers;
+using TheKing.Generators;
 using TheKing.Interfaces;
 using TheKing.Controllers;
 using TheKing.Features.Time;
@@ -12,6 +13,7 @@ namespace TheKing {
 	class Program {
 		static void Main(string[] args) {
 			var provider = Configure();
+			Generate(provider);
 			Init(provider);
 			Run(provider);
 		}
@@ -61,6 +63,8 @@ namespace TheKing {
 			});
 
 			var services = new ServiceCollection()
+				.AddSingleton<CountryGenerator>()
+				.AddSingleton<MapGenerator>()
 				.AddSingleton(gameLogics)
 				.AddSingleton<IDayStarter, GameLogics>(gameLogics)
 				.AddSingleton<ICountryHandler, GameLogics>(gameLogics)
@@ -87,6 +91,11 @@ namespace TheKing {
 				.AddSingleton<IStartHandler, SleepInterface>()
 				.AddSingleton<IContext<ConquestController>, ConquestInterface>();
 			return services.BuildServiceProvider();
+		}
+
+		static void Generate(IServiceProvider provider) {
+			provider.GetService<CountryGenerator>().Generate(3);
+			provider.GetService<MapGenerator>().Generate(5, 5);
 		}
 
 		static void Init(IServiceProvider provider) {

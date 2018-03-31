@@ -1,6 +1,10 @@
 ﻿namespace TheKing.Features.Countries {
 	enum RaceId {
 		Human,
-		Goblin
+		Goblin,
+		Orc,
+		Dwarf,
+		Halfling,
+		Elf,
 	}
 }
