@@ -309,4 +309,7 @@
   <data name="loc_prefixes_Woods" xml:space="preserve">
     <value>Red;Green;Yellow;Great;Wild;Dark</value>
   </data>
+  <data name="win_conquest" xml:space="preserve">
+    <value>You have destroyed all other countries.</value>
+  </data>
 </root>

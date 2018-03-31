@@ -635,5 +635,14 @@ namespace TheKing {
                 return ResourceManager.GetString("time_report", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have destroyed all other countries..
+        /// </summary>
+        internal static string win_conquest {
+            get {
+                return ResourceManager.GetString("win_conquest", resourceCulture);
+            }
+        }
     }
 }

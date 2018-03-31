@@ -10,8 +10,9 @@ namespace TheKing.Common {
 		CountryController _country;
 		TimeController    _time;
 
-		bool   _isFailed;
-		string _failDescription;
+		bool   _isFail;
+		bool   _isWin;
+		string _endDescription;
 
 		public GameLogics(InputController input, OutputController output, ContextController context, CountryController country, TimeController time) {
 			_input   = input;
@@ -27,16 +28,21 @@ namespace TheKing.Common {
 		}
 
 		void Fail(string description) {
-			_isFailed        = true;
-			_failDescription = description;
+			_isFail        = true;
+			_endDescription = description;
+		}
+
+		void Win(string description) {
+			_isWin          = true;
+			_endDescription = description;
 		}
 
 		bool Update() {
 			_context.ClearCases();
 			_context.Update();
 			_out.Write();
-			if ( _isFailed ) {
-				_out.Write(_failDescription);
+			if ( _isWin || _isFail ) {
+				_out.Write(_endDescription);
 				return false;
 			}
 			_context.WriteCases();
@@ -59,6 +65,18 @@ namespace TheKing.Common {
 			if ( _country.PlayerCountry == country ) {
 				Fail(reason);
 			}
+			if ( !HasOtherCountries() ) {
+				Win(Content.win_conquest);
+			}
+		}
+
+		bool HasOtherCountries() {
+			foreach ( var country in _country.Countries ) {
+				if ( !country.Player ) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }
