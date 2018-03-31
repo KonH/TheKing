@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using TheKing.Controllers.Kingdom;
-using TheKing.Controllers.Money;
+using System.Diagnostics;
+using System.Collections.Generic;
+using TheKing.Utils;
+using TheKing.Features.Army;
+using TheKing.Features.Money;
+using TheKing.Features.Countries;
 
 namespace TheKing.Controllers {
-	interface IReadOnlySquad {
-		int Count { get; }
-	}
-
-	class ArmyController : StateController, IUpdateHandler, IWelcomeHandler {
+	class ArmyController {
 		class Squad : IReadOnlySquad {
 			public int  Count { get; set; }
 			public bool Used  { get; private set; }
@@ -35,43 +33,16 @@ namespace TheKing.Controllers {
 			public List<Squad> Squads { get; }      = new List<Squad>();
 		}
 
+		PopulationController _population;
+
 		Dictionary<Country, ArmyState> _armyStates = new Dictionary<Country, ArmyState>();
 
-		public ArmyController(GameState state):base(state) {
-			Time.OnDayStart += OnDayStart;
-		}
-
-		public void Welcome() {
-			Out.Write(Content.army_welcome);
-		}
-
-		public void Update() {
-			Context.AddCase(
-				Content.army_recruit_request,
-				TryRecruit);
-			if ( GetAvailableCount(Player) > 0 ) {
-				Context.AddCase(
-					Content.army_conquest_request,
-					() => Context.GoTo(Conquest));
-			}
-			Context.AddBackCase();
-		}
-
-		void TryRecruit() {
-			var population = Population.GetCount(Player);
-			Out.WriteFormat(Content.army_recruit_request_2, GetUsage(Player), population);
-			while ( true ) {
-				var count = Input.ReadInt();
-				if ( (count > 0) && (population >= count) ) {
-					Out.Write(Content.army_recruit_response);
-					Recruit(Player, count);
-					break;	
-				}
-			}
+		public ArmyController(PopulationController population) {
+			_population = population;
 		}
 
 		ArmyState GetArmy(Country country) {
-			return Utils.GetOrCreate(country, _armyStates, () => new ArmyState());
+			return DictUtils.GetOrCreate(country, _armyStates, () => new ArmyState());
 		}
 
 		Squad GetOrCreateSquad(ArmyState army) {
@@ -104,7 +75,7 @@ namespace TheKing.Controllers {
 		}
 
 		public void Recruit(Country country, int count) {
-			Population.Remove(country, count);
+			_population.Remove(country, count);
 			var army = GetArmy(country);
 			var squad = GetOrCreateSquad(army);
 			squad.Count += count;
@@ -165,13 +136,6 @@ namespace TheKing.Controllers {
 			}
 			Debug.WriteLine($"Kill {country} in army squad: -{count} = {GetTotalCount(country)}");
 			return squad;
-		}
-
-		void OnDayStart() {
-			foreach ( var country in Countries ) {
-				var usage = GetDailyUsage(country);
-				Money.Remove(country, $"{Content.army_name} ({GetTotalCount(country)})", usage);
-			}
 		}
 	}
 }

@@ -1,7 +1,14 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using TheKing.Common;
+using TheKing.Handlers;
+using TheKing.Interfaces;
+using TheKing.Controllers;
+using TheKing.Features.Time;
+using TheKing.Features.Context;
+using TheKing.Features.Countries;
 
-namespace TheKing.New {
+namespace TheKing {
 	class Program {
 		static void Main(string[] args) {
 			var provider = Configure();

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
-using TheKing.Controllers.Time;
+using TheKing.Features.Time;
 
 namespace TheKing.Controllers {
-	class TimeController : StateController {
+	class TimeController {
 		public Date CurDate { get; private set; } = new Date(1, 1, 1);
 
-		public Action OnDayStart = new Action(() => { });
-		public Action OnDayEnd   = new Action(() => { });
-
-		public TimeController(GameState state) : base(state) { }
+		public event Action OnDayStart = new Action(() => { });
 
 		public void FirstDay() {
 			FireDayStart();
@@ -24,11 +21,11 @@ namespace TheKing.Controllers {
 		void FireDayStart() {
 			Debug.WriteLine($"Start of the day: {CurDate}");
 			OnDayStart.Invoke();
+			
 		}
 
 		void FireDayEnd() {
 			Debug.WriteLine($"End of the day: {CurDate}");
-			OnDayEnd.Invoke();
 		}
 	}
 }

@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using TheKing.Controllers.Kingdom;
-using TheKing.Controllers.Money;
+using System.Collections.Generic;
+using TheKing.Utils;
+using TheKing.Features.Money;
+using TheKing.Features.Countries;
 
 namespace TheKing.Controllers {
-	class PopulationController : StateController {
+	class PopulationController {
 		class PopulationState {
 			public int    Count      { get; set; } = 100;
 			public double TaxRate    { get; }      = 0.25;
@@ -31,16 +32,20 @@ namespace TheKing.Controllers {
 
 		Dictionary<Country, PopulationState> _populationStates = new Dictionary<Country, PopulationState>();
 
-		public PopulationController(GameState state) : base(state) {
-			Time.OnDayStart += OnDayStart;
-		}
-
 		PopulationState GetPopulation(Country country) {
-			return Utils.GetOrCreate(country, _populationStates, () => new PopulationState());
+			return DictUtils.GetOrCreate(country, _populationStates, () => new PopulationState());
 		}
 
 		public int GetCount(Country country) {
 			return GetPopulation(country).Count;
+		}
+
+		public Gold GetDailyTaxIncome(Country country) {
+			return GetPopulation(country).GetDailyTaxIncome();
+		}
+
+		public int TryGrowForDay(Country country, int locationCount) {
+			return GetPopulation(country).TryGrowForDay(locationCount);
 		}
 
 		public void Add(Country country, int count) {
@@ -53,19 +58,6 @@ namespace TheKing.Controllers {
 			var population = GetPopulation(country);
 			population.Count -= count;
 			Debug.WriteLine($"Remove {country} population: -{count} = {population.Count}");
-		}
-
-		void OnDayStart() {
-			foreach ( var country in Countries ) {
-				var population = GetPopulation(country);
-				var taxes = population.GetDailyTaxIncome();
-				Money.Add(country, $"{Content.taxes_name} ({population.Count})", taxes);
-				var locCount = Map.GetCountryLocations(country).Count;
-				var growCount = population.TryGrowForDay(locCount);
-				if ( growCount > 0 ) {
-					Debug.WriteLine($"Grow {country} population: +{growCount} = {population.Count}");
-				}
-			}
 		}
 	}
 }

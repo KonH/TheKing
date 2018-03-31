@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using TheKing.Controllers.Kingdom;
+using System.Collections.Generic;
+using TheKing.Features.Countries;
 
 namespace TheKing.Controllers {
 	class CountryController {
 		public Country PlayerCountry { get; } = new Country("YourKingdom", new Race(RaceId.Human));
-		// Temporary
-		public Country EnemyCountry { get; } = new Country("Goblington", new Race(RaceId.Goblin));
+		public Country EnemyCountry  { get; } = new Country("Goblington", new Race(RaceId.Goblin));
 
 		public List<Country> Countries => new List<Country>(_countries);
 
-		public Action<Country, string> OnCountryRemoved = new Action<Country, string>((c, s) => { });
+		public event Action<Country, string> OnCountryRemoved = new Action<Country, string>((c, s) => { });
 
 		List<Country> _countries = new List<Country>();
 

@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using TheKing.Features.Context;
 
 namespace TheKing.Controllers {
-	class Case {
-		public string Title    { get; }
-		public Action Callback { get; }
+	class ContextController {
+		public event Action OnStart = new Action(() => { });
 
-		public Case(string title, Action callback) {
-			Title    = title;
-			Callback = callback;
-		}
-	}
-
-	class ContextController : StateController {
 		public List<Case> Cases => new List<Case>(_cases);
 
-		IUpdateHandler  _curContext;
-		IWelcomeHandler _curWelcome;
-		bool            _started;
+		IServiceProvider _services;
+		OutputController _out;
+
+		IUpdateHandler _curContext;
+		bool           _started;
 
 		List<Case> _cases = new List<Case>();
 
-		public ContextController(GameState state) : base(state) { }
+		public ContextController(IServiceProvider services, OutputController output) {
+			_services = services;
+			_out      = output;
+		}
 
 		public void AddCase(string title, Action callback) {
 			_cases.Add(new Case(title, callback));
@@ -49,29 +48,30 @@ namespace TheKing.Controllers {
 		public void Update() {
 			if ( _curContext == null ) {
 				if ( _started ) {
-					Out.Write(Content.root_message);
+					_out.Write(Content.root_message);
 				} else {
-					Out.Write(Content.hello_message);
+					_out.Write(Content.hello_message);
 					_started = true;
 				}
-				AddCase(Content.go_to_map, () => GoTo(Map));
-				AddCase(Content.go_to_bank, () => GoTo(Money));
-				AddCase(Content.go_to_army, () => GoTo(Army));
-				AddCase(Content.next_day, () => Time.NextDay());
+				OnStart.Invoke();
 			} else {
-				if ( _curWelcome != null ) {
-					_curWelcome.Welcome();
-					_curWelcome = null;
-				}
 				_curContext.Update();
 			}
 		}
 
-		public void GoTo(IUpdateHandler controller, bool firstTime = true) {
-			_curContext = controller;
-			if ( firstTime ) {
-				_curWelcome = _curContext as IWelcomeHandler;
+		public void WriteCases() {
+			for ( var i = 0; i < _cases.Count; i++ ) {
+				_out.Write($"{i + 1}) {_cases[i].Title}");
 			}
+		}
+
+		public void GoTo(IUpdateHandler controller) {
+			_curContext = controller;
+		}
+
+		public void GoToRelatedContext<T>() {
+			var context = _services.GetService<IContext<T>>();
+			GoTo(context);
 		}
 	}
 }

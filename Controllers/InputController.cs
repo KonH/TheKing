@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using TheKing.Features.Context;
 
 namespace TheKing.Controllers {
-	class InputController : StateController {
-		public InputController(GameState state) : base(state) { }
-
+	class InputController {
 		public Action Update(IList<Case> cases) {
 			if ( cases.Any() ) {
-				for ( var i = 0; i < cases.Count; i++ ) {
-					Out.Write($"{i + 1}) {cases[i].Title}");
-				}
 				while ( true ) {
 					var selection = Console.ReadLine();
 					if ( int.TryParse(selection, out var index) ) {

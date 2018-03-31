@@ -1,18 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using TheKing.Controllers.Kingdom;
-using TheKing.Controllers.Map;
+﻿using System.Linq;
+using System.Collections.Generic;
+using TheKing.Features.Map;
+using TheKing.Features.Countries;
 
 namespace TheKing.Controllers {
-	class MapController : StateController, IUpdateHandler {
-
-		enum Direction {
-			North,
-			East,
-			South,
-			West,
-		}
-
+	class MapController {
 		Direction[] AllDirections = {
 			Direction.North,
 			Direction.East,
@@ -20,15 +12,14 @@ namespace TheKing.Controllers {
 			Direction.West,
 		};
 
-		Point                       _position;
 		Dictionary<Point, Location> _locations;
 
-		public MapController(GameState state):base(state) {
+		public MapController(CountryController country) {
 			_locations = new Dictionary<Point, Location>();
 
-			AddLocation(new Location(new Point(0, 0), "Home Planes", Player));
+			AddLocation(new Location(new Point(0, 0), "Home Planes", country.PlayerCountry));
 
-			AddLocation(new Location(new Point(0, 1), "Snow Mountains", Enemy));
+			AddLocation(new Location(new Point(0, 1), "Snow Mountains", country.EnemyCountry));
 			AddLocation(new Location(new Point(0, 2), "North Pole"));
 
 			AddLocation(new Location(new Point(-1, 0), "White Coast"));
@@ -40,17 +31,11 @@ namespace TheKing.Controllers {
 			AddLocation(new Location(new Point(0, -1), "Death Barrens"));
 			AddLocation(new Location(new Point(0, -2), "Great Ocean"));
 
-			CountryCtrl.OnCountryRemoved += (c, r) => RemoveCountry(c);
-
-			ResetPosition();
+			country.OnCountryRemoved += (c, r) => RemoveCountry(c);
 		}
 
 		void AddLocation(Location loc) {
 			_locations.Add(loc.Point, loc);
-		}
-
-		void ResetPosition() {
-			_position = new Point(0, 0);
 		}
 
 		void RemoveCountry(Country c) {
@@ -61,44 +46,22 @@ namespace TheKing.Controllers {
 			}
 		}
 
-		public void Update() {
-			var curLocation = GetLocationAt(_position);
-			DescribeLocation(curLocation);
-
-			foreach ( var dir in AllDirections ) {
-				var locationAt = GetLocationAt(_position, dir);
-				if ( locationAt != null ) {
-					var title = string.Format(Content.look_at, dir);
-					Context.AddCase(title, () => {
-						_position = TransformPoint(_position, dir);
-					});
-				}
-			}
-			Context.AddBackCaseWith(ResetPosition);
+		public Direction[] GetDirections() {
+			return AllDirections;
 		}
 
-		void DescribeLocation(Location loc) {
-			Out.WriteFormat(Content.here_is, loc.Name);
-			if ( loc.Owner != null ) {
-				var raceName = Content.ResourceManager.GetString("race_" + loc.Owner.Kind.Id);
-				Out.WriteFormat(Content.here_live, loc.Owner.Name, raceName);
-			} else {
-				Out.Write(Content.here_empty);
-			}
-		}
-
-		Location GetLocationAt(Point pos) {
+		public Location GetLocationAt(Point pos) {
 			if ( _locations.TryGetValue(pos, out var loc) ) {
 				return loc;
 			}
 			return null;
 		}
 
-		Location GetLocationAt(Point pos, Direction dir) {
+		public Location GetLocationAt(Point pos, Direction dir) {
 			return GetLocationAt(TransformPoint(pos, dir));
 		}
 
-		Point TransformPoint(Point p, Direction dir) {
+		public Point TransformPoint(Point p, Direction dir) {
 			switch ( dir ) {
 				case Direction.North: return new Point(p.X    , p.Y + 1);
 				case Direction.East : return new Point(p.X + 1, p.Y    );
