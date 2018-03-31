@@ -66,10 +66,10 @@ namespace TheKing.Controllers {
 
 		public void Remove(Country country, string title, Gold gold) {
 			Add(country, title, new Gold(-gold.Value));
-			CheckFail(country);
+			CheckMoneyFail(country);
 		}
 
-		void CheckFail(Country country) {
+		void CheckMoneyFail(Country country) {
 			if ( GetMoney(country).Balance.Value < 0 ) {
 				_country.Remove(country, Content.game_over_money);
 			}

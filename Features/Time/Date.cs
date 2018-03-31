@@ -32,6 +32,21 @@
 			return new Date(newDay, newMonth, newYear);
 		}
 
+		public static Date PrevDay(Date date) {
+			var newDay = date.Day - 1;
+			var newMonth = date.Month;
+			var newYear = date.Year;
+			if ( newDay < 1 ) {
+				newDay = 30;
+				newMonth--;
+				if ( newMonth < 1 ) {
+					newMonth = 12;
+					newYear--;
+				}
+			}
+			return new Date(newDay, newMonth, newYear);
+		}
+
 		public bool IsEquals(Date other) {
 			return TotalDays == other.TotalDays;
 		}

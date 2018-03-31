@@ -15,7 +15,7 @@ namespace TheKing.Handlers {
 
 		public void OnDayStart() {
 			foreach ( var country in _country.Countries ) {
-				var usage = _army.GetDailyUsage(country);
+				var usage = _army.GetTotalUsage(country);
 				_money.Remove(country, $"{Content.army_name} ({_army.GetTotalCount(country)})", usage);
 			}
 		}

@@ -12,9 +12,13 @@ namespace TheKing.Controllers {
 			Direction.West,
 		};
 
+		CountryController _country;
+
 		Dictionary<Point, Location> _locations;
 
 		public MapController(CountryController country) {
+			_country = country;
+
 			_locations = new Dictionary<Point, Location>();
 
 			AddLocation(new Location(new Point(0, 0), "Home Planes", true, 0, 2, country.PlayerCountry));
@@ -84,6 +88,20 @@ namespace TheKing.Controllers {
 				}
 			}
 			return result;
+		}
+
+		public void ChangeOwner(Location loc, Country country) {
+			var prevOwner = loc.Owner;
+			loc.Owner = country;
+			if ( prevOwner != null ) {
+				CheckLocationFail(prevOwner);
+			}
+		}
+
+		void CheckLocationFail(Country country) {
+			if ( GetCountryLocations(country).Count == 0 ) {
+				_country.Remove(country, Content.game_over_locations);
+			}
 		}
 	}
 }

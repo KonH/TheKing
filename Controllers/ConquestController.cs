@@ -7,11 +7,13 @@ using TheKing.Features.Countries;
 
 namespace TheKing.Controllers {
 	class ConquestController {
+		MapController       _map;
 		ArmyController      _army;
 		DiscoveryController _discovery;
 		MoveController      _move;
 
-		public ConquestController(ArmyController army, DiscoveryController discovery, MoveController move) {
+		public ConquestController(MapController map, ArmyController army, DiscoveryController discovery, MoveController move) {
+			_map       = map;
 			_army      = army;
 			_discovery = discovery;
 			_move      = move;
@@ -61,7 +63,7 @@ namespace TheKing.Controllers {
 		}
 
 		void OnConquestSuccess(Country invader, IReadOnlySquad squad, Location loc) {
-			loc.Owner = invader;
+			_map.ChangeOwner(loc, invader);
 			if ( squad != null ) {
 				_army.ReleaseSquad(invader, squad);
 			}

@@ -46,7 +46,7 @@ namespace TheKing.Interfaces {
 		void TryRecruit() {
 			var player = _country.PlayerCountry;
 			var population = _population.GetCount(player);
-			_out.WriteFormat(Content.army_recruit_request_2, _army.GetUsage(player), population);
+			_out.WriteFormat(Content.army_recruit_request_2, _army.GetUsagePerSoldier(player), population);
 			while ( true ) {
 				var count = _input.ReadInt();
 				if ( (count > 0) && (population >= count) ) {

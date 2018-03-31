@@ -178,6 +178,15 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You lands are captured..
+        /// </summary>
+        internal static string game_over_locations {
+            get {
+                return ResourceManager.GetString("game_over_locations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your treasury is empty..
         /// </summary>
         internal static string game_over_money {

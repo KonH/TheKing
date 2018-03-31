@@ -222,4 +222,7 @@
   <data name="here_unknown" xml:space="preserve">
     <value>We don't know who lives here.</value>
   </data>
+  <data name="game_over_locations" xml:space="preserve">
+    <value>You lands are captured.</value>
+  </data>
 </root>

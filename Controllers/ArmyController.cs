@@ -66,11 +66,11 @@ namespace TheKing.Controllers {
 				.Sum(s => s.Count);
 		}
 
-		public Gold GetUsage(Country country) {
+		public Gold GetUsagePerSoldier(Country country) {
 			return GetArmy(country).Usage;
 		}
 
-		public Gold GetDailyUsage(Country country) {
+		public Gold GetTotalUsage(Country country) {
 			return GetArmy(country).Usage * GetTotalCount(country);
 		}
 

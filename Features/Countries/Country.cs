@@ -1,11 +1,13 @@
 ﻿namespace TheKing.Features.Countries {
 	class Country {
-		public string Name { get; }
-		public Race   Kind { get; }
+		public string Name   { get; }
+		public Race   Kind   { get; }
+		public bool   Player { get; }
 
-		public Country(string name, Race kind) {
-			Name = name;
-			Kind = kind;
+		public Country(string name, Race kind, bool player) {
+			Name   = name;
+			Kind   = kind;
+			Player = player;
 		}
 
 		public override string ToString() {

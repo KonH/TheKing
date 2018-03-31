@@ -5,8 +5,8 @@ using TheKing.Features.Countries;
 
 namespace TheKing.Controllers {
 	class CountryController {
-		public Country PlayerCountry { get; } = new Country("YourKingdom", new Race(RaceId.Human));
-		public Country EnemyCountry  { get; } = new Country("Goblington", new Race(RaceId.Goblin));
+		public Country PlayerCountry { get; } = new Country("YourKingdom", new Race(RaceId.Human), true);
+		public Country EnemyCountry  { get; } = new Country("Goblington", new Race(RaceId.Goblin), false);
 
 		public List<Country> Countries => new List<Country>(_countries);
 

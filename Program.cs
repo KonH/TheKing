@@ -47,7 +47,17 @@ namespace TheKing {
 					provider.GetService<ArmyController>(),
 					provider.GetService<InputController>(),
 					provider.GetService<OutputController>(),
-					provider.GetService<ContextController>());
+					provider.GetService<ContextController>()
+				);
+			});
+
+			var bot = SingletonFactory<BotController>.Create(provider => {
+				return new BotController(
+					provider.GetService<TimeController>(),
+					provider.GetService<CountryController>(),
+					provider.GetService<MoneyController>(),
+					provider.GetService<ArmyController>()
+					);
 			});
 
 			var services = new ServiceCollection()
@@ -66,8 +76,10 @@ namespace TheKing {
 				.AddSingleton<ConquestController>()
 				.AddSingleton<DiscoveryController>()
 				.AddSingleton<MoveController>()
+				.AddSingleton<BotController>()
 				.AddSingleton<IDayStarter, ArmyUpdater>()
 				.AddSingleton<IDayStarter, PopulationUpdater>()
+				.AddSingleton<IDayStarter, BotController>()
 				.AddSingleton<IStartHandler, MapInterface>()
 				.AddSingleton<IStartHandler, MoneyInteface>()
 				.AddSingleton<IStartHandler, ArmyInterface>(armyInterface)
