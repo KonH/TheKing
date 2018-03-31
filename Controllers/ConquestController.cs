@@ -4,13 +4,16 @@ using TheKing.Features.Countries;
 
 namespace TheKing.Controllers {
 	class ConquestController {
-		ArmyController _army;
+		ArmyController      _army;
+		DiscoveryController _discovery;
 
-		public ConquestController(ArmyController army) {
-			_army = army;
+		public ConquestController(ArmyController army, DiscoveryController discovery) {
+			_army      = army;
+			_discovery = discovery;
 		}
 
 		public bool TryConquest(Country invader, IReadOnlySquad invaderSquad, Location loc) {
+			_discovery.MarkDiscovered(invader, loc);
 			if ( loc.Owner == null ) {
 				OnConquestSuccess(invader, invaderSquad, loc);
 				return true;

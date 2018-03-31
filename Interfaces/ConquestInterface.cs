@@ -7,25 +7,27 @@ using TheKing.Features.Countries;
 
 namespace TheKing.Interfaces {
 	class ConquestInterface : IUpdateHandler, IContext<ConquestController> {
-		ContextController  _context;
-		InputController    _input;
-		OutputController   _out;
-		CountryController  _country;
-		MapController      _map;
-		ArmyController     _army;
-		ConquestController _conquest;
+		ContextController   _context;
+		InputController     _input;
+		OutputController    _out;
+		CountryController   _country;
+		MapController       _map;
+		DiscoveryController _discovery;
+		ArmyController      _army;
+		ConquestController  _conquest;
 
 		public ConquestInterface(
 			ContextController context, InputController input, OutputController output, CountryController country,
-			MapController map, ArmyController army, ConquestController conquest
+			MapController map, DiscoveryController discovery, ArmyController army, ConquestController conquest
 		) {
-			_context  = context;
-			_input    = input;
-			_out      = output;
-			_country  = country;
-			_map      = map;
-			_army     = army;
-			_conquest = conquest;
+			_context   = context;
+			_input     = input;
+			_out       = output;
+			_country   = country;
+			_map       = map;
+			_discovery = discovery;
+			_army      = army;
+			_conquest  = conquest;
 		}
 
 
@@ -35,8 +37,12 @@ namespace TheKing.Interfaces {
 				var locs = GetAcceptableLocations(player);
 				foreach ( var loc in locs ) {
 					var name = loc.Name;
-					if ( loc.Owner != null ) {
-						name += $" ({loc.Owner.Name})";
+					if ( _discovery.IsDiscovered(player, loc) ) {
+						if ( loc.Owner != null ) {
+							name += $" ({loc.Owner.Name})";
+						}
+					} else {
+						name += " (?)";
 					}
 					name += ".";
 					_context.AddCase(name, () => TryStartConquest(loc, player));

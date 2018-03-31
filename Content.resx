@@ -219,4 +219,7 @@
   <data name="army_conquest_response" xml:space="preserve">
     <value>The army is on the way!</value>
   </data>
+  <data name="here_unknown" xml:space="preserve">
+    <value>We don't know who lives here.</value>
+  </data>
 </root>

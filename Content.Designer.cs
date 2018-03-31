@@ -268,6 +268,15 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We don&apos;t know who lives here..
+        /// </summary>
+        internal static string here_unknown {
+            get {
+                return ResourceManager.GetString("here_unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What did we earn yesterday?.
         /// </summary>
         internal static string income_request {

@@ -1,20 +1,26 @@
 ﻿using TheKing.Controllers;
 using TheKing.Features.Map;
 using TheKing.Features.Context;
+using TheKing.Features.Countries;
 
 namespace TheKing.Interfaces {
 	class MapInterface : IUpdateHandler, IStartHandler {
-
-		MapController     _map;
-		OutputController  _out;
-		ContextController _context;
+		CountryController   _country;
+		MapController       _map;
+		DiscoveryController _discovery;
+		OutputController    _out;
+		ContextController   _context;
 
 		Point _position;
 
-		public MapInterface(MapController map, OutputController output, ContextController context) {
-			_map     = map;
-			_out     = output;
-			_context = context;
+		public MapInterface(
+			CountryController country, MapController map, DiscoveryController discovery, OutputController output, ContextController context
+		) {
+			_country   = country;
+			_map       = map;
+			_discovery = discovery;
+			_out       = output;
+			_context   = context;
 		}
 
 		public void OnStart() {
@@ -23,7 +29,7 @@ namespace TheKing.Interfaces {
 
 		public void Update() {
 			var curLocation = _map.GetLocationAt(_position);
-			DescribeLocation(curLocation);
+			DescribeLocation(_country.PlayerCountry, curLocation);
 
 			foreach ( var dir in _map.GetDirections() ) {
 				var locationAt = _map.GetLocationAt(_position, dir);
@@ -38,9 +44,11 @@ namespace TheKing.Interfaces {
 			_context.AddBackCaseWith(() => _position = new Point(0, 0));
 		}
 
-		void DescribeLocation(Location loc) {
+		void DescribeLocation(Country country, Location loc) {
 			_out.WriteFormat(Content.here_is, loc.Name);
-			if ( loc.Owner != null ) {
+			if ( !_discovery.IsDiscovered(country, loc) ) {
+				_out.Write(Content.here_unknown);
+			} else if ( loc.Owner != null ) {
 				var raceName = Content.ResourceManager.GetString("race_" + loc.Owner.Kind.Id);
 				_out.WriteFormat(Content.here_live, loc.Owner.Name, raceName);
 			} else {
