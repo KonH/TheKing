@@ -54,9 +54,9 @@ namespace TheKing.Controllers {
 
 		public Point TransformPoint(Point p, Direction dir) {
 			switch ( dir ) {
-				case Direction.North: return new Point(p.X    , p.Y + 1);
+				case Direction.North: return new Point(p.X    , p.Y - 1);
 				case Direction.East : return new Point(p.X + 1, p.Y    );
-				case Direction.South: return new Point(p.X    , p.Y - 1);
+				case Direction.South: return new Point(p.X    , p.Y + 1);
 				case Direction.West : return new Point(p.X - 1, p.Y    );
 			}
 			return p;

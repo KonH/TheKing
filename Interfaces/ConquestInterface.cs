@@ -5,6 +5,7 @@ using TheKing.Features.Map;
 using TheKing.Features.Context;
 using TheKing.Features.Conquest;
 using TheKing.Features.Countries;
+using TheKing.Utils;
 
 namespace TheKing.Interfaces {
 	class ConquestInterface : IUpdateHandler, IContext<ConquestController> {
@@ -42,7 +43,7 @@ namespace TheKing.Interfaces {
 					var name = targetLoc.Name;
 					if ( _discovery.IsDiscovered(player, targetLoc) ) {
 						if ( targetLoc.Owner != null ) {
-							var raceName = Content.ResourceManager.GetString("race_" + targetLoc.Owner.Kind.Id);
+							var raceName = LocUtils.TranslateRaceName(targetLoc.Owner);
 							name += $" ({targetLoc.Owner.Name}, {raceName})";
 						}
 					} else {

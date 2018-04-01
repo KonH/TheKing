@@ -98,8 +98,8 @@ namespace TheKing {
 		}
 
 		static void Generate(IServiceProvider provider) {
-			provider.GetService<CountryGenerator>().Generate(3);
-			provider.GetService<MapGenerator>().Generate(5, 5);
+			provider.GetService<CountryGenerator>().Generate(5);
+			provider.GetService<MapGenerator>().Generate(6, 6);
 		}
 
 		static void Init(IServiceProvider provider) {

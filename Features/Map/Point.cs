@@ -7,5 +7,9 @@
 			X = x;
 			Y = y;
 		}
+
+		public bool IsEqual(Point other) {
+			return (X == other.X) && (Y == other.Y);
+		}
 	}
 }

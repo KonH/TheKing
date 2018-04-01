@@ -327,4 +327,7 @@
   <data name="here_lived" xml:space="preserve">
     <value>We found that {0} ({1}) lived in {2}.</value>
   </data>
+  <data name="enemy_failed" xml:space="preserve">
+    <value>{0} ({1}) was defeated.</value>
+  </data>
 </root>

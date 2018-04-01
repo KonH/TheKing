@@ -340,6 +340,15 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} ({1}) was defeated..
+        /// </summary>
+        internal static string enemy_failed {
+            get {
+                return ResourceManager.GetString("enemy_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You lands are captured..
         /// </summary>
         internal static string game_over_locations {

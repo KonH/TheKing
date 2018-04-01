@@ -1,6 +1,7 @@
 ﻿using TheKing.Controllers;
 using TheKing.Features.Time;
 using TheKing.Features.Countries;
+using TheKing.Utils;
 
 namespace TheKing.Common {
 	class GameLogics : IDayStarter, ICountryHandler {
@@ -67,6 +68,9 @@ namespace TheKing.Common {
 			}
 			if ( !HasOtherCountries() ) {
 				Win(Content.win_conquest);
+			} else {
+				var raceName = LocUtils.TranslateRaceName(country);
+				_out.WriteFormat(Content.enemy_failed, country.Name, raceName);
 			}
 		}
 
