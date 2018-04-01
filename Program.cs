@@ -10,6 +10,10 @@ using TheKing.Features.Context;
 using TheKing.Features.Countries;
 
 namespace TheKing {
+	static class Cheats {
+		public static bool Money_NoLoses = false;
+	}
+
 	class Program {
 		static void Main(string[] args) {
 			var provider = Configure();

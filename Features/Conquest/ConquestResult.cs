@@ -1,15 +1,18 @@
 ﻿using TheKing.Features.Move;
+using TheKing.Features.Countries;
 
 namespace TheKing.Features.Conquest {
 	class ConquestResult {
-		public int        Loses   { get; }
-		public bool       Success { get; }
-		public MoveResult Move    { get; }
+		public Country    PrevOwner { get; }
+		public int        Loses     { get; }
+		public bool       Success   { get; }
+		public MoveResult Move      { get; }
 
-		public ConquestResult(int loses, bool result, MoveResult moveResult) {
-			Loses   = loses;
-			Success = result;
-			Move    = moveResult;
+		public ConquestResult(Country prevOwner, int loses, bool result, MoveResult moveResult) {
+			PrevOwner = prevOwner;
+			Loses     = loses;
+			Success   = result;
+			Move      = moveResult;
 		}
 	}
 }

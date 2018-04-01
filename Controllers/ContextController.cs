@@ -50,7 +50,10 @@ namespace TheKing.Controllers {
 				if ( _started ) {
 					_out.Write(Content.root_message);
 				} else {
-					_out.Write(Content.hello_message);
+					var country = _services.GetService<CountryController>().PlayerCountry;
+					var countryName = country.Name;
+					var raceName = Content.ResourceManager.GetString("race_" + country.Kind.Id); ;
+					_out.WriteFormat(Content.hello_message, countryName, raceName);
 					_started = true;
 				}
 				OnStart.Invoke();

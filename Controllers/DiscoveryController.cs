@@ -17,6 +17,9 @@ namespace TheKing.Controllers {
 		}
 
 		public bool IsDiscovered(Country country, Location loc) {
+			if ( country == null ) {
+				return false;
+			}
 			if ( loc.Owner == country ) {
 				return true;
 			}
@@ -24,6 +27,9 @@ namespace TheKing.Controllers {
 		}
 
 		public void MarkDiscovered(Country country, Location loc) {
+			if ( country == null ) {
+				return;
+			}
 			var countryState = GetCountryState(country);
 			if ( countryState.ContainsKey(loc) ) {
 				countryState[loc] = true;

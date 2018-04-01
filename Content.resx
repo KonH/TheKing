@@ -136,7 +136,7 @@
     <value>Go to the map.</value>
   </data>
   <data name="hello_message" xml:space="preserve">
-    <value>- Hello, your majesty! It is first day of your regiment.</value>
+    <value>- Hello, your majesty! It is first day of your regiment of {0} ({1}).</value>
   </data>
   <data name="here_is" xml:space="preserve">
     <value>Here is {0}.</value>
@@ -323,5 +323,8 @@
   </data>
   <data name="win_conquest" xml:space="preserve">
     <value>You have destroyed all other countries.</value>
+  </data>
+  <data name="here_lived" xml:space="preserve">
+    <value>We found that {0} ({1}) lived in {2}.</value>
   </data>
 </root>

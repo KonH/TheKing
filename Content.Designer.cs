@@ -403,7 +403,7 @@ namespace TheKing {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - Hello, your majesty! It is first day of your regiment..
+        ///   Looks up a localized string similar to - Hello, your majesty! It is first day of your regiment of {0} ({1})..
         /// </summary>
         internal static string hello_message {
             get {
@@ -435,6 +435,15 @@ namespace TheKing {
         internal static string here_live {
             get {
                 return ResourceManager.GetString("here_live", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We found that {0} ({1}) lived in {2}..
+        /// </summary>
+        internal static string here_lived {
+            get {
+                return ResourceManager.GetString("here_lived", resourceCulture);
             }
         }
         

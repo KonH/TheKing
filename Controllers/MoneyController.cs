@@ -58,6 +58,9 @@ namespace TheKing.Controllers {
 			if ( gold.Value == 0 ) {
 				return;
 			}
+			if ( (_country.PlayerCountry == country) && (gold.Value < 0) && Cheats.Money_NoLoses ) {
+				return;
+			}
 			var money = GetMoney(country);
 			var curDate = _time.CurDate;
 			money.Add(curDate, title, gold);

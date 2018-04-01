@@ -20,12 +20,15 @@ namespace TheKing.Generators {
 
 		CountryGenerator _country;
 
+		HashSet<string> _usedNames = new HashSet<string>();
+
 		public MapGenerator(CountryGenerator country) {
 			_country = country;
 		}
 
 		public void Generate(int width, int height) {
 			Locations = new Dictionary<Point, Location>();
+			_usedNames.Clear();
 			CreateSpace(width, height);
 			FillLocations(width, height);
 			AssignCountries();
@@ -53,10 +56,24 @@ namespace TheKing.Generators {
 
 		Location GenerateLocation(Point pos, bool isSide) {
 			var type = GetLocationType(isSide);
-			var name = GenerateName(type);
+			var name = GenerateNameNoRepeats(type);
 			var difficulty = GetDifficulty(type);
 			var distance = GetDistance(type);
 			return new Location(pos, name, !isSide, difficulty, distance);
+		}
+
+		string GenerateNameNoRepeats(LocationType type) {
+			var attempts = 0;
+			var newName = string.Empty;
+			do {
+				newName = GenerateName(type);
+				if ( attempts > 10 ) {
+					break;
+				}
+				attempts++;
+			} while ( _usedNames.Contains(newName) );
+			_usedNames.Add(newName);
+			return newName;
 		}
 
 		string GenerateName(LocationType type) {
@@ -73,21 +90,21 @@ namespace TheKing.Generators {
 		double GetDifficulty(LocationType type) {
 			var rand = Rand.NextDouble();
 			switch ( type ) {
-				case LocationType.Lands    : return rand * 0.10;
-				case LocationType.Barrens  : return rand * 0.30;
-				case LocationType.Woods    : return rand * 0.40;
-				case LocationType.Mountains: return rand * 0.70;
+				case LocationType.Lands    : return 0.10 + rand * 0.10;
+				case LocationType.Barrens  : return 0.20 + rand * 0.15;
+				case LocationType.Woods    : return 0.30 + rand * 0.20;
+				case LocationType.Mountains: return 0.40 + rand * 0.30;
 				default: return 0;
 			}
 		}
 
 		int GetDistance(LocationType type) {
-			var rand = Rand.Next(4);
+			var rand = Rand.Next(3);
 			switch ( type ) {
-				case LocationType.Lands    : return 2 + rand;
-				case LocationType.Barrens  : return 4 + rand;
-				case LocationType.Woods    : return 6 + rand;
-				case LocationType.Mountains: return 8 + rand;
+				case LocationType.Lands    : return 1 + rand;
+				case LocationType.Barrens  : return 2 + rand;
+				case LocationType.Woods    : return 4 + rand;
+				case LocationType.Mountains: return 6 + rand;
 				default: return 0;
 			}
 		}

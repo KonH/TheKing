@@ -96,6 +96,10 @@ namespace TheKing.Interfaces {
 		}
 
 		void OnConquestComplete(ConquestResult result, Location loc) {
+			if ( result.PrevOwner != null ) {
+				var raceName = Content.ResourceManager.GetString("race_" + result.PrevOwner.Kind.Id);
+				_out.WriteFormat(Content.here_lived, result.PrevOwner.Name, raceName, loc.Name);
+			}
 			if ( result.Success ) {
 				_out.WriteFormat(Content.conquest_success, loc.Name, result.Move.Loses, result.Loses);
 			} else {

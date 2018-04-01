@@ -33,19 +33,19 @@ namespace TheKing.Controllers {
 				if ( moveResult.Success ) {
 					onComplete(TryConquest(invader, invaderSquad, targetLoc, moveResult), targetLoc);
 				} else {
-					onComplete(new ConquestResult(0, false, moveResult), targetLoc);
+					onComplete(new ConquestResult(null, 0, false, moveResult), targetLoc);
 				}
 			});
 		}
 
 		ConquestResult TryConquest(Country invader, IReadOnlySquad invaderSquad, Location loc, MoveResult moveResult) {
 			if ( !moveResult.Success ) {
-				return new ConquestResult(0, false, moveResult);
+				return new ConquestResult(null, 0, false, moveResult);
 			}
 			_discovery.MarkDiscovered(invader, loc);
 			if ( loc.Owner == null ) {
 				OnConquestSuccess(invader, invaderSquad, loc);
-				return new ConquestResult(0, true, moveResult);
+				return new ConquestResult(null, 0, true, moveResult);
 			} else {
 				var defender = loc.Owner;
 				var defenderSquad = _army.AquireMaxSquad(defender);
@@ -66,7 +66,7 @@ namespace TheKing.Controllers {
 			defenderSquad = _army.KillInSquad(defender, defenderSquad, agressorPower);
 			invaderSquad = _army.KillInSquad(invader, invaderSquad, defenderPower);
 			var loses = agressorPower - (invaderSquad != null ? invaderSquad.Count : 0);
-			return new ConquestResult(loses, defenderSquad == null, moveResult);
+			return new ConquestResult(defender, loses, defenderSquad == null, moveResult);
 		}
 
 		void OnConquestSuccess(Country invader, IReadOnlySquad squad, Location loc) {
