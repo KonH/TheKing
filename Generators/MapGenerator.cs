@@ -38,8 +38,7 @@ namespace TheKing.Generators {
 		void FillLocations() {
 			var points = new List<Point>(Locations.Keys);
 			foreach ( var p in points ) {
-				var isSide = IsSidePoint(p);
-				var loc = GenerateLocation(p, isSide);
+				var loc = GenerateLocation(p);
 				Locations[p] = loc;
 				Debug.WriteLine($"MapGenerator: New location: '{loc.Name}' at ({p.X}, {p.Y})");
 			}
@@ -52,9 +51,8 @@ namespace TheKing.Generators {
 				(p.X == _settings.Width - 1) || 
 				(p.Y == _settings.Height - 1);
 		}
-
-		Location GenerateLocation(Point pos, bool isSide) {
-			var type = GetLocationType(isSide);
+		Location GenerateLocation(Point pos) {
+			var type = GetLocationType(pos.Y, IsSidePoint(pos));
 			var name = GetName(pos, type);
 			var difficulty = GetDifficulty(type);
 			var distance = GetDistance(type);
@@ -125,16 +123,18 @@ namespace TheKing.Generators {
 			}
 		}
 
-		LocationType GetLocationType(bool isSide) {
-			if ( isSide ) {
-				if ( RandUtils.Rand.NextDouble() < _settings.SideSeaChance ) {
-					return LocationType.Sea;
-				}
+		LocationType GetLocationType(double y, bool isSide) {
+			var allTypes = new List<LocationType>((LocationType[])Enum.GetValues(typeof(LocationType)));
+			if ( !isSide ) {
+				allTypes.Remove(LocationType.Sea);
 			}
-			var allTypes = (LocationType[])Enum.GetValues(typeof(LocationType));
-			var wantedTypes = new List<LocationType>(allTypes);
-			wantedTypes.Remove(LocationType.Sea);
-			return RandUtils.GetItem(wantedTypes);
+			var allChances = new double[allTypes.Count];
+			for ( var i = 0; i < allTypes.Count; i++ ) {
+				var chanceFunc = _settings.ChanceByYAxis[allTypes[i]];
+				var normalizedY = y / _settings.Height;
+				allChances[i] = chanceFunc(normalizedY);
+			}
+			return RandUtils.GetItemWithChances(allTypes, allChances);
 		}
 
 		void AssignCountries() {

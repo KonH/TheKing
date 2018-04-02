@@ -9,11 +9,18 @@ using TheKing.Features.Time;
 using TheKing.Features.Context;
 using TheKing.Features.Countries;
 using TheKing.Settings;
+using TheKing.Features.Map;
 
 namespace TheKing {
 	class Program {
 		static void Main(string[] args) {
-			var mapSettings = new MapSettings(5, 5).WithSideSeaChance(0.25f);
+			var mapSettings = new MapSettings(6, 6)
+				.WithChance(LocationType.Sea, y => y)
+				.WithChance(LocationType.Lands, y => Math.Max(Math.Sin((y - 0.3) * Math.PI * 2), 0.0))
+				.WithChance(LocationType.Woods, y => Math.Max(Math.Sin((y - 0.1) * Math.PI * 2), 0.0))
+				.WithChance(LocationType.Mountains, y => (1 - y))
+				.WithChance(LocationType.Barrens, y => y);
+
 			var provider = Configure(mapSettings);
 			Generate(provider);
 			Init(provider);
