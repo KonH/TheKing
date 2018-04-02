@@ -22,56 +22,11 @@ namespace TheKing {
 			Run(provider);
 		}
 
-		static class SingletonFactory<T> where T : class {
-			static T _instance;
-
-			public static Func<IServiceProvider, T> Create(Func<IServiceProvider, T> create) {
-				return provider => {
-					if ( _instance == null ) {
-						_instance = create(provider);
-					}
-					return _instance;
-				};
-			}
-		}
-
 		static ServiceProvider Configure() {
-			var gameLogics = SingletonFactory<GameLogics>.Create(provider => {
-				return new GameLogics(
-					provider.GetService<InputController>(),
-					provider.GetService<OutputController>(),
-					provider.GetService<ContextController>(),
-					provider.GetService<CountryController>(),
-					provider.GetService<TimeController>()
-				);
-			});
-
-			var armyInterface = SingletonFactory<ArmyInterface>.Create(provider => {
-				return new ArmyInterface(
-					provider.GetService<CountryController>(),
-					provider.GetService<PopulationController>(),
-					provider.GetService<ArmyController>(),
-					provider.GetService<InputController>(),
-					provider.GetService<OutputController>(),
-					provider.GetService<ContextController>()
-				);
-			});
-
-			var bot = SingletonFactory<BotController>.Create(provider => {
-				return new BotController(
-					provider.GetService<TimeController>(),
-					provider.GetService<CountryController>(),
-					provider.GetService<MoneyController>(),
-					provider.GetService<ArmyController>()
-					);
-			});
-
 			var services = new ServiceCollection()
 				.AddSingleton<CountryGenerator>()
 				.AddSingleton<MapGenerator>()
-				.AddSingleton(gameLogics)
-				.AddSingleton<IDayStarter, GameLogics>(gameLogics)
-				.AddSingleton<ICountryHandler, GameLogics>(gameLogics)
+				.AddGameLogics()
 				.AddSingleton<InputController>()
 				.AddSingleton<OutputController>()
 				.AddSingleton<ContextController>()
@@ -90,8 +45,7 @@ namespace TheKing {
 				.AddSingleton<IDayStarter, BotController>()
 				.AddSingleton<IStartHandler, MapInterface>()
 				.AddSingleton<IStartHandler, MoneyInteface>()
-				.AddSingleton<IStartHandler, ArmyInterface>(armyInterface)
-				.AddSingleton<IContext<ArmyController>, ArmyInterface>(armyInterface)
+				.AddArmyInterface()
 				.AddSingleton<IStartHandler, SleepInterface>()
 				.AddSingleton<IContext<ConquestController>, ConquestInterface>();
 			return services.BuildServiceProvider();
@@ -103,21 +57,10 @@ namespace TheKing {
 		}
 
 		static void Init(IServiceProvider provider) {
-			var time = provider.GetService<TimeController>();
-			var updaters = provider.GetServices<IDayStarter>();
-			foreach ( var updater in updaters ) {
-				time.OnDayStart += updater.OnDayStart;
-			}
-			var context = provider.GetService<ContextController>();
-			var starters = provider.GetServices<IStartHandler>();
-			foreach ( var starter in starters ) {
-				context.OnStart += starter.OnStart;
-			}
-			var country = provider.GetService<CountryController>();
-			var countryHandlers = provider.GetServices<ICountryHandler>();
-			foreach ( var handler in countryHandlers ) {
-				country.OnCountryRemoved += handler.OnCountryRemoved;
-			}
+			provider
+				.PerformOneToMany<TimeController, IDayStarter>       ((c, h) => c.OnDayStart += h.OnDayStart)
+				.PerformOneToMany<ContextController, IStartHandler>  ((c, h) => c.OnStart += h.OnStart)
+				.PerformOneToMany<CountryController, ICountryHandler>((c, h) => c.OnCountryRemoved += h.OnCountryRemoved);
 		}
 
 		static void Run(IServiceProvider provider) {
