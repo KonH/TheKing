@@ -1,11 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Diagnostics;
+using System.Collections.Generic;
+using TheKing.Utils;
 using TheKing.Controllers;
 using TheKing.Features.Map;
 using TheKing.Features.Context;
 using TheKing.Features.Countries;
-using System.Diagnostics;
-using System;
-using TheKing.Utils;
 
 namespace TheKing.Interfaces {
 	class MapInterface : IUpdateHandler, IStartHandler {
@@ -16,6 +17,8 @@ namespace TheKing.Interfaces {
 		ContextController   _context;
 
 		Point _position;
+
+		Dictionary<Country, ConsoleColor> _colorMap = new Dictionary<Country, ConsoleColor>();
 
 		public MapInterface(
 			CountryController country, MapController map, DiscoveryController discovery, OutputController output, ContextController context
@@ -69,15 +72,32 @@ namespace TheKing.Interfaces {
 					if ( _position.IsEqual(pos) ) {
 						locName = $"[{locName}]";
 					}
-					var color = ConsoleColor.White;
-					if ( locAt.Owner == _country.PlayerCountry ) {
-						color = ConsoleColor.Green;
-					} else if ( _discovery.IsDiscovered(_country.PlayerCountry, locAt) && ( locAt.Owner != null ) ) {
-						color = ConsoleColor.Red;
-					}
+					var color = GetLocationColor(locAt);
 					_out.WriteCustomFormat("{0,20} ", color, locName);
 				}
 			}
+		}
+
+		ConsoleColor GetLocationColor(Location loc) {
+			if ( loc.Owner == _country.PlayerCountry ) {
+				return ConsoleColor.Green;
+			} else if ( _discovery.IsDiscovered(_country.PlayerCountry, loc) && (loc.Owner != null) ) {
+				return GetCountryColor(loc.Owner);
+			}
+			return ConsoleColor.White;
+		}
+
+		ConsoleColor GetCountryColor(Country country) {
+			return DictUtils.GetOrCreate(country, _colorMap, () => GetNewCountryColor(_colorMap.Values));
+		}
+
+		ConsoleColor GetNewCountryColor(ICollection<ConsoleColor> exceptions) {
+			var values = new List<ConsoleColor>((ConsoleColor[])Enum.GetValues(typeof(ConsoleColor)));
+			values.Remove(ConsoleColor.Black);
+			values.Remove(ConsoleColor.White);
+			values.Remove(ConsoleColor.Green);
+			return RandUtils.GetItem(values);
+			
 		}
 
 		void ResetPosition() {
