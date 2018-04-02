@@ -21,12 +21,14 @@ namespace TheKing.Controllers {
 
 		CountryController _country;
 		TimeController    _time;
+		CheatController   _cheats;
 
 		Dictionary<Country, MoneyState> _moneyStates = new Dictionary<Country, MoneyState>();
 
-		public MoneyController(CountryController country, TimeController time) {
+		public MoneyController(CountryController country, TimeController time, CheatController cheats = null) {
 			_country = country;
 			_time    = time;
+			_cheats  = cheats;
 		}
 
 		MoneyState GetMoney(Country country) {
@@ -40,8 +42,6 @@ namespace TheKing.Controllers {
 		public List<HistoryItem> GetIncome(Country country, Date date) {
 			return GetHistoryItems(country, date, item => item.Gold > Gold.Zero);
 		}
-
-
 
 		public List<HistoryItem> GetExpenses(Country country, Date date) {
 			return GetHistoryItems(country, date, item => item.Gold < Gold.Zero);
@@ -58,8 +58,10 @@ namespace TheKing.Controllers {
 			if ( gold.Value == 0 ) {
 				return;
 			}
-			if ( (_country.PlayerCountry == country) && (gold.Value < 0) && Cheats.Money_NoLoses ) {
-				return;
+			if ( (_cheats != null) && _cheats.MoneyDecreaseDisabed ) {
+				if ( (_country.PlayerCountry == country) && (gold.Value < 0) ) {
+					return;
+				}
 			}
 			var money = GetMoney(country);
 			var curDate = _time.CurDate;

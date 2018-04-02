@@ -10,10 +10,6 @@ using TheKing.Features.Context;
 using TheKing.Features.Countries;
 
 namespace TheKing {
-	static class Cheats {
-		public static bool Money_NoLoses = false;
-	}
-
 	class Program {
 		static void Main(string[] args) {
 			var provider = Configure();
@@ -27,6 +23,7 @@ namespace TheKing {
 				.AddSingleton<CountryGenerator>()
 				.AddSingleton<MapGenerator>()
 				.AddGameLogics()
+				.AddSingleton<CheatController>()
 				.AddSingleton<InputController>()
 				.AddSingleton<OutputController>()
 				.AddSingleton<ContextController>()
@@ -47,7 +44,8 @@ namespace TheKing {
 				.AddSingleton<IStartHandler, MoneyInteface>()
 				.AddArmyInterface()
 				.AddSingleton<IStartHandler, SleepInterface>()
-				.AddSingleton<IContext<ConquestController>, ConquestInterface>();
+				.AddSingleton<IContext<ConquestController>, ConquestInterface>()
+				.AddSingleton<StartMenuController>();
 			return services.BuildServiceProvider();
 		}
 
@@ -64,6 +62,7 @@ namespace TheKing {
 		}
 
 		static void Run(IServiceProvider provider) {
+			provider.GetService<StartMenuController>().Run();
 			provider.GetService<GameLogics>().Run();
 			Console.WriteLine("Press any key...");
 			Console.ReadKey();

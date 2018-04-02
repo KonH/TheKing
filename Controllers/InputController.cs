@@ -21,11 +21,15 @@ namespace TheKing.Controllers {
 
 		public int ReadInt() {
 			while ( true ) {
-				var selection = Console.ReadLine();
+				var selection = ReadString();
 				if ( int.TryParse(selection, out var value) ) {
 					return value;
 				}
 			}
+		}
+
+		public string ReadString() {
+			return Console.ReadLine();
 		}
 	}
 }

@@ -691,6 +691,22 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _____ _            _   ___             
+        ///|_   _| |          | | / (_)            
+        ///  | | | |__   ___  | |/ / _ _ __   __ _ 
+        ///  | | | &apos;_ \ / _ \ |    \| | &apos;_ \ / _` |
+        ///  | | | | | |  __/ | |\  \ | | | | (_| |
+        ///  \_/ |_| |_|\___| \_| \_/_|_| |_|\__, |
+        ///                                   __/ |
+        ///                                  |___/.
+        /// </summary>
+        internal static string title {
+            get {
+                return ResourceManager.GetString("title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have destroyed all other countries..
         /// </summary>
         internal static string win_conquest {

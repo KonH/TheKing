@@ -5,8 +5,14 @@ using TheKing.Features.Countries;
 
 namespace TheKing.Controllers {
 	class DiscoveryController {
+		CheatController _cheats;
+
 		Dictionary<Country, Dictionary<Location, bool>> _discoveredStates
 			= new Dictionary<Country, Dictionary<Location, bool>>();
+
+		public DiscoveryController(CheatController cheats = null) {
+			_cheats = cheats;
+		}
 
 		Dictionary<Location, bool> GetCountryState(Country country) {
 			return DictUtils.GetOrCreate(country, _discoveredStates, () => new Dictionary<Location, bool>());
@@ -21,6 +27,9 @@ namespace TheKing.Controllers {
 				return false;
 			}
 			if ( loc.Owner == country ) {
+				return true;
+			}
+			if ( (_cheats != null) && _cheats.AllDiscovered && country.Player ) {
 				return true;
 			}
 			return GetDiscoveredState(country, loc);
