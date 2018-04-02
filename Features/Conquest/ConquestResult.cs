@@ -1,18 +1,27 @@
 ﻿using TheKing.Features.Move;
 using TheKing.Features.Countries;
+using TheKing.Features.Map;
 
 namespace TheKing.Features.Conquest {
 	class ConquestResult {
-		public Country    PrevOwner { get; }
-		public int        Loses     { get; }
-		public bool       Success   { get; }
-		public MoveResult Move      { get; }
+		public Location   Location      { get; }
+		public Country    Invader       { get; }
+		public Country    Defender      { get; }
+		public SquadInfo  InvaderSquad  { get; }
+		public SquadInfo  DefenderSquad { get; }
+		public bool       Success       { get; }
+		public MoveResult Move          { get; }
 
-		public ConquestResult(Country prevOwner, int loses, bool result, MoveResult moveResult) {
-			PrevOwner = prevOwner;
-			Loses     = loses;
-			Success   = result;
-			Move      = moveResult;
+		public ConquestResult(
+			Location location, Country invader, Country defender, SquadInfo invaderSquad, SquadInfo defenderSquad, bool result, MoveResult moveResult
+		) {
+			Location      = location;
+			Invader       = invader;
+			Defender      = defender;
+			InvaderSquad  = invaderSquad;
+			DefenderSquad = defenderSquad;
+			Success       = result;
+			Move          = moveResult;
 		}
 	}
 }

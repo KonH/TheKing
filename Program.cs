@@ -10,6 +10,7 @@ using TheKing.Features.Context;
 using TheKing.Features.Countries;
 using TheKing.Settings;
 using TheKing.Features.Map;
+using TheKing.Features.Conquest;
 
 namespace TheKing {
 	class Program {
@@ -54,7 +55,7 @@ namespace TheKing {
 				.AddSingleton<IStartHandler, MoneyInteface>()
 				.AddArmyInterface()
 				.AddSingleton<IStartHandler, SleepInterface>()
-				.AddSingleton<IContext<ConquestController>, ConquestInterface>()
+				.AddConquestInterface()
 				.AddSingleton<StartMenuController>();
 			return services.BuildServiceProvider();
 		}
@@ -66,9 +67,10 @@ namespace TheKing {
 
 		static void Init(IServiceProvider provider) {
 			provider
-				.PerformOneToMany<TimeController, IDayStarter>       ((c, h) => c.OnDayStart += h.OnDayStart)
-				.PerformOneToMany<ContextController, IStartHandler>  ((c, h) => c.OnStart += h.OnStart)
-				.PerformOneToMany<CountryController, ICountryHandler>((c, h) => c.OnCountryRemoved += h.OnCountryRemoved);
+				.PerformOneToMany<TimeController, IDayStarter>         ((c, h) => c.OnDayStart += h.OnDayStart)
+				.PerformOneToMany<ContextController, IStartHandler>    ((c, h) => c.OnStart += h.OnStart)
+				.PerformOneToMany<CountryController, ICountryHandler>  ((c, h) => c.OnCountryRemoved += h.OnCountryRemoved)
+				.PerformOneToMany<ConquestController, IConquestHandler>((c, h) => c.OnConquest += h.OnConquest);
 		}
 
 		static void Run(IServiceProvider provider) {

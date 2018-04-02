@@ -340,4 +340,13 @@
                                    __/ |
                                   |___/</value>
   </data>
+  <data name="enemy_conquest_fail" xml:space="preserve">
+    <value>We have defended {0}.</value>
+  </data>
+  <data name="enemy_conquest_result" xml:space="preserve">
+    <value>Our {0} is under attack! {1} ({2}) army with {3} soldiers arrived. We defend with {4}. They lost {5}, we lost {6} soldiers.</value>
+  </data>
+  <data name="enemy_conquest_success" xml:space="preserve">
+    <value>We lost {0}.</value>
+  </data>
 </root>

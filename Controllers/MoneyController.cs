@@ -58,7 +58,7 @@ namespace TheKing.Controllers {
 			if ( gold.Value == 0 ) {
 				return;
 			}
-			if ( (_cheats != null) && _cheats.MoneyDecreaseDisabed ) {
+			if ( (_cheats != null) && _cheats.MoneyDecreaseDisabled ) {
 				if ( (_country.PlayerCountry == country) && (gold.Value < 0) ) {
 					return;
 				}

@@ -340,6 +340,33 @@ namespace TheKing {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We have defended {0}..
+        /// </summary>
+        internal static string enemy_conquest_fail {
+            get {
+                return ResourceManager.GetString("enemy_conquest_fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our {0} is under attack! {1} ({2}) army with {3} soldiers arrived. We defend with {4}. They lost {5}, we lost {6} soldiers..
+        /// </summary>
+        internal static string enemy_conquest_result {
+            get {
+                return ResourceManager.GetString("enemy_conquest_result", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We lost {0}..
+        /// </summary>
+        internal static string enemy_conquest_success {
+            get {
+                return ResourceManager.GetString("enemy_conquest_success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} ({1}) was defeated..
         /// </summary>
         internal static string enemy_failed {

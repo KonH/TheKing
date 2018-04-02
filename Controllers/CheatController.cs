@@ -1,6 +1,7 @@
 ﻿namespace TheKing.Controllers {
 	class CheatController {
-		public bool MoneyDecreaseDisabed { get; set; }
-		public bool AllDiscovered        { get; set; }
+		public bool MoneyDecreaseDisabled { get; set; }
+		public bool AllDiscovered         { get; set; }
+		public bool NonConquestable       { get; set; }
 	}
 }

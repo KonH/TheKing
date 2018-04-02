@@ -6,6 +6,7 @@ using TheKing.Controllers;
 using TheKing.Features.Time;
 using TheKing.Features.Context;
 using TheKing.Features.Countries;
+using TheKing.Features.Conquest;
 
 namespace TheKing {
 	static class Extensions {
@@ -53,6 +54,25 @@ namespace TheKing {
 				.AddSingleton<IStartHandler, ArmyInterface>(armyInterface)
 				.AddSingleton<IContext<ArmyController>, ArmyInterface>(armyInterface);
 		}
+
+		public static IServiceCollection AddConquestInterface(this IServiceCollection services) {
+			var conquestInterface = SingletonFactory<ConquestInterface>.Create(provider => {
+				return new ConquestInterface(
+					provider.GetService<ContextController>(),
+					provider.GetService<InputController>(),
+					provider.GetService<OutputController>(),
+					provider.GetService<CountryController>(),
+					provider.GetService<MapController>(),
+					provider.GetService<DiscoveryController>(),
+					provider.GetService<ArmyController>(),
+					provider.GetService<ConquestController>()
+				);
+			});
+			return services
+				.AddSingleton<IContext<ConquestController>, ConquestInterface>()
+				.AddSingleton<IConquestHandler, ConquestInterface>(conquestInterface);
+		}
+
 
 		public static IServiceProvider PerformOneToMany<TController, TInterface>(this IServiceProvider provider, Action<TController, TInterface> act) {
 			var source = provider.GetService<TController>();

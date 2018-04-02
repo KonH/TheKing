@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using TheKing.Controllers;
+﻿using TheKing.Controllers;
 using TheKing.Features.Map;
 using TheKing.Features.Context;
 using TheKing.Features.Conquest;
@@ -8,7 +6,7 @@ using TheKing.Features.Countries;
 using TheKing.Utils;
 
 namespace TheKing.Interfaces {
-	class ConquestInterface : IUpdateHandler, IContext<ConquestController> {
+	class ConquestInterface : IUpdateHandler, IContext<ConquestController>, IConquestHandler {
 		ContextController   _context;
 		InputController     _input;
 		OutputController    _out;
@@ -32,11 +30,10 @@ namespace TheKing.Interfaces {
 			_conquest  = conquest;
 		}
 
-
 		public void Update() {
 			var player = _country.PlayerCountry;
 			if ( _army.GetAvailableCount(player) > 0 ) {
-				var locPairs = GetAcceptableLocations(player);
+				var locPairs = _conquest.GetAcceptableLocations(player);
 				foreach ( var pair in locPairs ) {
 					var homeLoc = pair.Item1;
 					var targetLoc = pair.Item2;
@@ -59,29 +56,6 @@ namespace TheKing.Interfaces {
 				() => _context.GoToRelatedContext<ArmyController>());
 		}
 
-		HashSet<Tuple<Location, Location>> GetAcceptableLocations(Country country) {
-			var result = new HashSet<Tuple<Location, Location>>();
-			var countryLocs = _map.GetCountryLocations(country);
-			foreach ( var playerLoc in countryLocs ) {
-				var nearLocs = _map.GetNearLocations(playerLoc.Point);
-				foreach ( var nearLoc in nearLocs ) {
-					if ( nearLoc.Reachable && _conquest.CanConquest(country, nearLoc) ) {
-						var alreadyAdded = false;
-						foreach ( var item in result ) {
-							if ( item.Item2 == nearLoc ) {
-								alreadyAdded = true;
-								break;
-							}
-						}
-						if ( !alreadyAdded ) {
-							result.Add(Tuple.Create(playerLoc, nearLoc));
-						}
-					}
-				}
-			}
-			return result;
-		}
-
 		void TryStartConquest(Location homeLoc, Location targetLoc, Country country) {
 			var maxCount = _army.GetAvailableCount(country);
 			_out.WriteFormat(Content.army_conquest_request_2, maxCount);
@@ -97,14 +71,31 @@ namespace TheKing.Interfaces {
 		}
 
 		void OnConquestComplete(ConquestResult result, Location loc) {
-			if ( result.PrevOwner != null ) {
-				var raceName = Content.ResourceManager.GetString("race_" + result.PrevOwner.Kind.Id);
-				_out.WriteFormat(Content.here_lived, result.PrevOwner.Name, raceName, loc.Name);
+			if ( result.Defender != null ) {
+				var raceName = Content.ResourceManager.GetString("race_" + result.Defender.Kind.Id);
+				_out.WriteFormat(Content.here_lived, result.Defender.Name, raceName, loc.Name);
 			}
+			var batlleLoses = result.InvaderSquad != null ? result.InvaderSquad.Loses : 0;
 			if ( result.Success ) {
-				_out.WriteFormat(Content.conquest_success, loc.Name, result.Move.Loses, result.Loses);
+				_out.WriteFormat(Content.conquest_success, loc.Name, result.Move.Loses, batlleLoses);
 			} else {
-				_out.WriteFormat(Content.conquest_failed, loc.Name, result.Move.Loses, result.Loses);
+				_out.WriteFormat(Content.conquest_failed, loc.Name, result.Move.Loses, batlleLoses);
+			}
+		}
+
+		public void OnConquest(ConquestResult result) {
+			if ( result.Defender == _country.PlayerCountry ) {
+				_out.WriteFormat(
+					Content.enemy_conquest_result,
+					result.Location.Name,
+					result.Invader.Name,
+					LocUtils.TranslateRaceName(result.Invader),
+					result.InvaderSquad.Count,
+					result.DefenderSquad.Count,
+					result.InvaderSquad.Loses,
+					result.DefenderSquad.Loses
+				);
+				_out.WriteFormat(result.Success ? Content.enemy_conquest_success : Content.enemy_conquest_fail, result.Location.Name);
 			}
 		}
 	}

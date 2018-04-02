@@ -19,8 +19,9 @@ namespace TheKing.Controllers {
 				_output.Write("CHEATS:");
 
 				var cheatDict = new Dictionary<char, string> {
-					{ 'm', nameof(CheatController.MoneyDecreaseDisabed) },
-					{ 'd', nameof(CheatController.AllDiscovered) }
+					{ 'm', nameof(CheatController.MoneyDecreaseDisabled) },
+					{ 'd', nameof(CheatController.AllDiscovered) },
+					{ 'c', nameof(CheatController.NonConquestable) }
 				};
 
 				foreach ( var cheat in cheatDict ) {

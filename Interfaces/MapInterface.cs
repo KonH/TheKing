@@ -96,6 +96,11 @@ namespace TheKing.Interfaces {
 			values.Remove(ConsoleColor.Black);
 			values.Remove(ConsoleColor.White);
 			values.Remove(ConsoleColor.Green);
+			foreach ( var exc in exceptions ) {
+				if ( values.Count > 0 ) {
+					values.Remove(exc);
+				}
+			}
 			return RandUtils.GetItem(values);
 			
 		}
