@@ -43,12 +43,12 @@ namespace TheKing.Interfaces {
 			var curLocation = _map.GetLocationAt(_position);
 			DescribeLocation(_country.PlayerCountry, curLocation);
 
-			foreach ( var dir in _map.GetDirections() ) {
+			foreach ( var dir in MapUtils.GetDirections() ) {
 				var locationAt = _map.GetLocationAt(_position, dir);
 				if ( locationAt != null ) {
 					var title = string.Format(Content.look_at, dir);
 					_context.AddCase(title, () => {
-						_position = _map.TransformPoint(_position, dir);
+						_position = MapUtils.TransformPoint(_position, dir);
 					});
 				}
 			}

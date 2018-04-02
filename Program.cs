@@ -8,19 +8,22 @@ using TheKing.Controllers;
 using TheKing.Features.Time;
 using TheKing.Features.Context;
 using TheKing.Features.Countries;
+using TheKing.Settings;
 
 namespace TheKing {
 	class Program {
 		static void Main(string[] args) {
-			var provider = Configure();
+			var mapSettings = new MapSettings(5, 5).WithSideSeaChance(0.25f);
+			var provider = Configure(mapSettings);
 			Generate(provider);
 			Init(provider);
 			Run(provider);
 		}
 
-		static ServiceProvider Configure() {
+		static ServiceProvider Configure(MapSettings mapSettings) {
 			var services = new ServiceCollection()
 				.AddSingleton<CountryGenerator>()
+				.AddSingleton(mapSettings)
 				.AddSingleton<MapGenerator>()
 				.AddGameLogics()
 				.AddSingleton<CheatController>()
@@ -51,7 +54,7 @@ namespace TheKing {
 
 		static void Generate(IServiceProvider provider) {
 			provider.GetService<CountryGenerator>().Generate(5);
-			provider.GetService<MapGenerator>().Generate(6, 6);
+			provider.GetService<MapGenerator>().Generate();
 		}
 
 		static void Init(IServiceProvider provider) {

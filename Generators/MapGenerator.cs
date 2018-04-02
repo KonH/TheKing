@@ -2,71 +2,87 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using TheKing.Features.Map;
+using TheKing.Settings;
 using TheKing.Utils;
 
 namespace TheKing.Generators {
 	class MapGenerator {
-		enum LocationType {
-			Sea,
-			Lands,
-			Mountains,
-			Barrens,
-			Woods
-		}
-
-		static Random Rand = new Random(DateTime.Now.Millisecond);
-
 		public Dictionary<Point, Location> Locations { get; private set; }
 
 		CountryGenerator _country;
+		MapSettings      _settings;
 
 		HashSet<string> _usedNames = new HashSet<string>();
 
-		public MapGenerator(CountryGenerator country) {
-			_country = country;
+		public MapGenerator(CountryGenerator country, MapSettings settings) {
+			_country  = country;
+			_settings = settings;
 		}
 
-		public void Generate(int width, int height) {
+		public void Generate() {
 			Locations = new Dictionary<Point, Location>();
 			_usedNames.Clear();
-			CreateSpace(width, height);
-			FillLocations(width, height);
+			CreateSpace();
+			FillLocations();
 			AssignCountries();
 		}
 
-		void CreateSpace(int width, int height) {
-			for ( var x = 0; x < width; x++ ) {
-				for ( var y = 0; y < height; y++ ) {
+		void CreateSpace() {
+			for ( var x = 0; x < _settings.Width; x++ ) {
+				for ( var y = 0; y < _settings.Height; y++ ) {
 					Locations.Add(new Point(x, y), null);
 				}
 			}
 		}
 
-		void FillLocations(int width, int height) {
+		void FillLocations() {
 			var points = new List<Point>(Locations.Keys);
 			foreach ( var p in points ) {
-				var isSide =
-					(p.X == 0) || (p.Y == 0) ||
-					(p.X == width - 1) || (p.Y == height - 1);
+				var isSide = IsSidePoint(p);
 				var loc = GenerateLocation(p, isSide);
 				Locations[p] = loc;
 				Debug.WriteLine($"MapGenerator: New location: '{loc.Name}' at ({p.X}, {p.Y})");
 			}
 		}
 
+		bool IsSidePoint(Point p) {
+			return 
+				(p.X == 0) ||
+				(p.Y == 0) ||
+				(p.X == _settings.Width - 1) || 
+				(p.Y == _settings.Height - 1);
+		}
+
 		Location GenerateLocation(Point pos, bool isSide) {
 			var type = GetLocationType(isSide);
-			var name = GenerateNameNoRepeats(type);
+			var name = GetName(pos, type);
 			var difficulty = GetDifficulty(type);
 			var distance = GetDistance(type);
-			return new Location(pos, name, !isSide, difficulty, distance);
+			return new Location(pos, type, name, difficulty, distance);
+		}
+
+		string GetName(Point pos, LocationType type) {
+			if ( type == LocationType.Sea ) {
+				return GenerateNameNeighborsUsed(pos, type);
+			}
+			return GenerateNameNoRepeats(type);
+		}
+
+		string GenerateNameNeighborsUsed(Point pos, LocationType type) {
+			var nearLocs = Locations.GetNearLocations(pos);
+			foreach ( var loc in nearLocs ) {
+				if ( (loc != null) && (loc.Type == type) ) {
+					return loc.Name;
+				}
+			}
+			return GenerateNameNoRepeats(type);
 		}
 
 		string GenerateNameNoRepeats(LocationType type) {
 			var attempts = 0;
 			var newName = string.Empty;
 			do {
-				newName = GenerateName(type);
+				newName = GenerateNameFromResources(type);
 				if ( attempts > 10 ) {
 					break;
 				}
@@ -76,7 +92,7 @@ namespace TheKing.Generators {
 			return newName;
 		}
 
-		string GenerateName(LocationType type) {
+		string GenerateNameFromResources(LocationType type) {
 			var prefixes = $"loc_prefixes_{type}";
 			var names = $"loc_names_{type}";
 			return $"{SelectName(prefixes)} {SelectName(names)}";
@@ -88,7 +104,7 @@ namespace TheKing.Generators {
 		}
 
 		double GetDifficulty(LocationType type) {
-			var rand = Rand.NextDouble();
+			var rand = RandUtils.Rand.NextDouble();
 			switch ( type ) {
 				case LocationType.Lands    : return 0.10 + rand * 0.10;
 				case LocationType.Barrens  : return 0.20 + rand * 0.15;
@@ -99,7 +115,7 @@ namespace TheKing.Generators {
 		}
 
 		int GetDistance(LocationType type) {
-			var rand = Rand.Next(3);
+			var rand = RandUtils.Rand.Next(3);
 			switch ( type ) {
 				case LocationType.Lands    : return 1 + rand;
 				case LocationType.Barrens  : return 2 + rand;
@@ -111,7 +127,9 @@ namespace TheKing.Generators {
 
 		LocationType GetLocationType(bool isSide) {
 			if ( isSide ) {
-				return LocationType.Sea;
+				if ( RandUtils.Rand.NextDouble() < _settings.SideSeaChance ) {
+					return LocationType.Sea;
+				}
 			}
 			var allTypes = (LocationType[])Enum.GetValues(typeof(LocationType));
 			var wantedTypes = new List<LocationType>(allTypes);

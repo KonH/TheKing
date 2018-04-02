@@ -9,8 +9,6 @@ using TheKing.Utils;
 
 namespace TheKing.Controllers {
 	class MoveController {
-		static Random Rand = new Random(DateTime.Now.Millisecond);
-
 		TimeController _time;
 		ArmyController _army;
 
@@ -46,7 +44,7 @@ namespace TheKing.Controllers {
 		int ProcessSquadLoses(Country country, double difficulty, ref IReadOnlySquad squad) {
 			var loses = 0;
 			for ( var i = 0; i < squad.Count; i++ ) {
-				if ( Rand.NextDouble() < difficulty ) {
+				if ( RandUtils.Rand.NextDouble() < difficulty ) {
 					loses++;
 				}
 			}

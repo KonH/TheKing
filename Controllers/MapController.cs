@@ -1,18 +1,12 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using TheKing.Utils;
 using TheKing.Generators;
 using TheKing.Features.Map;
 using TheKing.Features.Countries;
 
 namespace TheKing.Controllers {
 	class MapController {
-		Direction[] AllDirections = {
-			Direction.North,
-			Direction.East,
-			Direction.South,
-			Direction.West,
-		};
-
 		CountryController _country;
 
 		Dictionary<Point, Location> _locations;
@@ -37,44 +31,19 @@ namespace TheKing.Controllers {
 			}
 		}
 
-		public Direction[] GetDirections() {
-			return AllDirections;
-		}
-
 		public Location GetLocationAt(Point pos) {
-			if ( _locations.TryGetValue(pos, out var loc) ) {
-				return loc;
-			}
-			return null;
+			return _locations.GetLocationAt(pos);
 		}
 
 		public Location GetLocationAt(Point pos, Direction dir) {
-			return GetLocationAt(TransformPoint(pos, dir));
+			return _locations.GetLocationAt(pos, dir);
 		}
-
-		public Point TransformPoint(Point p, Direction dir) {
-			switch ( dir ) {
-				case Direction.North: return new Point(p.X    , p.Y - 1);
-				case Direction.East : return new Point(p.X + 1, p.Y    );
-				case Direction.South: return new Point(p.X    , p.Y + 1);
-				case Direction.West : return new Point(p.X - 1, p.Y    );
-			}
-			return p;
-		}
-
 		public List<Location> GetCountryLocations(Country country) {
 			return _locations.Values.Where(loc => loc.Owner == country).ToList();
 		}
 
 		public List<Location> GetNearLocations(Point point) {
-			var result = new List<Location>();
-			foreach ( var dir in AllDirections ) {
-				var locationAt = GetLocationAt(point, dir);
-				if ( locationAt != null ) {
-					result.Add(locationAt);
-				}
-			}
-			return result;
+			return _locations.GetNearLocations(point);
 		}
 
 		public void ChangeOwner(Location loc, Country country) {
