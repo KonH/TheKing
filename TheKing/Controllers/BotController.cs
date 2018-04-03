@@ -70,7 +70,7 @@ namespace TheKing.Controllers {
 				var acceptableLocs = _conquest.GetAcceptableLocations(country);
 				if ( acceptableLocs.Count > 0 ) {
 					var selectedLocs = acceptableLocs;
-					var squadSize = Math.Max(canBeUsedArmy / selectedLocs.Count, 1);
+					var squadSize = Math.Max(canBeUsedArmy / selectedLocs.Count, GetMinSquadSize(country));
 					Debug.WriteLine(
 						$"BotController ({country}).Conquest: Squad size = {squadSize}, " +
 						$"locations = (all = {acceptableLocs.Count}, selected = {selectedLocs.Count})"
@@ -87,10 +87,19 @@ namespace TheKing.Controllers {
 					}
 				}
 			}
+		}
 
-			void OnConquestComplete(ConquestResult result) {
-				// TODO
+		int GetMinSquadSize(Country country) {
+			for ( var i = 1; i < int.MaxValue; i++ ) {
+				if ( _conquest.GetPower(country, i) > 0 ) {
+					return i;
+				}
 			}
+			return 1;
+		}
+
+		void OnConquestComplete(ConquestResult result) {
+			// TODO
 		}
 	}
 }

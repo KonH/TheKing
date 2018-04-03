@@ -102,8 +102,8 @@ namespace TheKing.Controllers {
 			}
 		}
 
-		int GetPower(Country country, int soldiers) {
-			return (int)Math.Ceiling(_army.GetPower(country) * soldiers);
+		public int GetPower(Country country, int soldiers) {
+			return (int)(_army.GetPower(country) * soldiers);
 		}
 
 		ConquestResult TryDefeat(
