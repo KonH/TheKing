@@ -23,13 +23,13 @@ namespace TheKing {
 				.WithChance(LocationType.Barrens,   y => y * 0.75);
 
 			var raceSettings = new RaceSettings()
-				// population, growthRate, power, speed, taxRate, soldierPrice
-				.With(new Race(RaceId.Human,    100, 0.02, 1.00, 1.00, 0.25,  5))
-				.With(new Race(RaceId.Dwarf,     50, 0.01, 1.75, 0.50, 0.75, 10))
-				.With(new Race(RaceId.Elf,       50, 0.01, 1.50, 1.25, 0.25,  7))
-				.With(new Race(RaceId.Goblin,   200, 0.04, 0.25, 2.00, 0.10,  2))
-				.With(new Race(RaceId.Halfling, 100, 0.02, 0.25, 0.75, 0.50,  4))
-				.With(new Race(RaceId.Orc,      150, 0.03, 0.50, 1.50, 0.15,  3));
+				// population, growthRate, power, speed, taxRate, soldierPrice, loc
+				.With(new Race(RaceId.Human,    100, 0.02, 1.00, 1.00, 0.25,  5, LocationType.Lands))
+				.With(new Race(RaceId.Dwarf,     50, 0.01, 1.75, 0.50, 0.75, 10, LocationType.Mountains))
+				.With(new Race(RaceId.Elf,       50, 0.01, 1.50, 1.25, 0.25,  7, LocationType.Woods))
+				.With(new Race(RaceId.Goblin,   200, 0.04, 0.25, 2.00, 0.10,  2, LocationType.Barrens))
+				.With(new Race(RaceId.Halfling, 100, 0.02, 0.25, 0.75, 0.50,  4, LocationType.Lands))
+				.With(new Race(RaceId.Orc,      150, 0.03, 0.50, 1.50, 0.15,  3, LocationType.Barrens));
 
 			var provider = Configure(mapSettings, raceSettings);
 			PreRun(provider);

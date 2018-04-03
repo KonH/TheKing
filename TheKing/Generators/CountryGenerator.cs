@@ -3,6 +3,7 @@ using System.Diagnostics;
 using TheKing.Utils;
 using TheKing.Settings;
 using TheKing.Features.Countries;
+using System.Linq;
 
 namespace TheKing.Generators {
 	class CountryGenerator {
@@ -31,7 +32,12 @@ namespace TheKing.Generators {
 				return _settings.PlayerRace;
 			}
 			var allRaces = _settings.AllRaces;
-			var id = RandUtils.GetItem(allRaces);
+			var raceChances = new List<double>();
+			foreach ( var race in allRaces ) {
+				var count = Countries.Count(c => c.Kind.Id == race);
+				raceChances.Add(1 / (2 * count + 1));
+			}
+			var id = RandUtils.GetItemWithChances(allRaces, raceChances);
 			return _settings.Get(id);
 		}
 

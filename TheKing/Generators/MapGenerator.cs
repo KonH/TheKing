@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using TheKing.Features.Map;
-using TheKing.Settings;
 using TheKing.Utils;
+using TheKing.Settings;
+using TheKing.Features.Map;
+using TheKing.Features.Countries;
+using System.Linq;
 
 namespace TheKing.Generators {
 	class MapGenerator {
@@ -147,11 +149,20 @@ namespace TheKing.Generators {
 
 			for ( var i = 0; i < _country.Countries.Count; i++ ) {
 				var country = _country.Countries[i];
-				var location = RandUtils.GetItem(availableLocs);
+				var location = SelectLocation(availableLocs, country);
 				location.Owner = country;
 				availableLocs.Remove(location);
-				Debug.WriteLine($"MapGenerator: Assign {_country.Countries[i]} to location: {location.Name} ({location.Point.X}, {location.Point.Y})");
+				Debug.WriteLine(
+					$"MapGenerator: Assign {_country.Countries[i]} to location: " +
+					$"{location.Name} ({location.Point.X}, {location.Point.Y})"
+				);
 			}
+		}
+
+		Location SelectLocation(List<Location> availableLocs, Country country) {
+			var raceLocs = availableLocs.Where(l => l.Type == country.Kind.StartLoc);
+			var selectableLocs = raceLocs.Any() ? raceLocs.ToList() : availableLocs;
+			return RandUtils.GetItem(selectableLocs);
 		}
 	}
 }
