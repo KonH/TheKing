@@ -352,4 +352,13 @@
 	<data name="race_select" xml:space="preserve">
 		<value>Select your race:</value>
 	</data>
+	<data name="mode_normal" xml:space="preserve">
+		<value>Normal Mode</value>
+	</data>
+	<data name="mode_free" xml:space="preserve">
+		<value>Free Mode</value>
+	</data>
+	<data name="one_alive" xml:space="preserve">
+		<value>Last country: {0} ({1}).</value>
+	</data>
 </root>

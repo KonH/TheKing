@@ -4,6 +4,8 @@ using TheKing.Settings;
 
 namespace TheKing.Controllers {
 	class StartMenuController {
+		public bool WithPlayer { get; private set; }
+
 		InputController  _input;
 		OutputController _output;
 		RaceSettings      _races;
@@ -22,7 +24,10 @@ namespace TheKing.Controllers {
 			_output.Write(Content.title);
 			_output.Write();
 			UpdateCheats();
-			UpdateRaceSelection();
+			UpdateMode();
+			if ( WithPlayer ) {
+				UpdateRaceSelection();
+			}
 		}
 
 		void UpdateCheats() {
@@ -46,6 +51,18 @@ namespace TheKing.Controllers {
 				}
 			}
 			_output.Write();
+		}
+
+		void UpdateMode() {
+			_output.Write($"1) {Content.mode_normal}");
+			_output.Write($"2) {Content.mode_free}");
+			do {
+				var selection = _input.ReadInt();
+				if ( (selection > 0) && (selection <= 2) ) {
+					WithPlayer = (selection == 0);
+					return;
+				}
+			} while ( true );
 		}
 
 		void UpdateRaceSelection() {

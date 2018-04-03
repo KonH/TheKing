@@ -32,8 +32,9 @@ namespace TheKing {
 				.With(new Race(RaceId.Orc,      150, 0.03, 0.66, 1.50, 0.15,  3, LocationType.Barrens));
 
 			var provider = Configure(mapSettings, raceSettings);
-			PreRun(provider);
-			Generate(provider);
+			var startMenu = provider.GetService<StartMenuController>();
+			PreRun(startMenu);
+			Generate(provider, startMenu.WithPlayer);
 			Init(provider);
 			Run(provider);
 		}
@@ -66,17 +67,18 @@ namespace TheKing {
 				.AddSingleton<IStartHandler, MoneyInteface>()
 				.AddArmyInterface()
 				.AddSingleton<IStartHandler, SleepInterface>()
+				.AddSingleton<IStartHandler, FreeModeInterface>()
 				.AddConquestInterface()
 				.AddSingleton<StartMenuController>();
 			return services.BuildServiceProvider();
 		}
 
-		static void PreRun(IServiceProvider provider) {
-			provider.GetService<StartMenuController>().Run();
+		static void PreRun(StartMenuController startMenu) {
+			startMenu.Run();
 		}
 
-		static void Generate(IServiceProvider provider) {
-			provider.GetService<CountryGenerator>().Generate(5);
+		static void Generate(IServiceProvider provider, bool withPlayer) {
+			provider.GetService<CountryGenerator>().Generate(withPlayer, 5);
 			provider.GetService<MapGenerator>().Generate();
 		}
 

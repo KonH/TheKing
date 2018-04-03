@@ -47,6 +47,9 @@ namespace TheKing.Common {
 				return false;
 			}
 			_context.WriteCases();
+			if ( _context.AutoUpdate ) {
+				return true;
+			}
 			var nextAction = _input.Update(_context.Cases);
 			if ( nextAction != null ) {
 				_out.Write();
@@ -71,6 +74,11 @@ namespace TheKing.Common {
 			} else {
 				var raceName = LocUtils.TranslateRaceName(country);
 				_out.WriteFormat(Content.enemy_failed, country.Name, raceName);
+				if ( _country.Countries.Count == 1 ) {
+					var lastCountry = _country.Countries[0];
+					var lastRace = LocUtils.TranslateRaceName(lastCountry);
+					Win(string.Format(Content.one_alive, lastCountry.Name, lastRace));
+				}
 			}
 		}
 

@@ -15,11 +15,13 @@ namespace TheKing.Generators {
 			_settings = settings;
 		}
 
-		public void Generate(int enemies) {
+		public void Generate(bool withPlayer, int enemies) {
 			Countries.Clear();
-			var playerCountry = Generate(true);
-			Countries.Add(playerCountry);
-			Debug.WriteLine($"CountryGenerator: New player: {playerCountry}");
+			if ( withPlayer ) {
+				var playerCountry = Generate(true);
+				Countries.Add(playerCountry);
+				Debug.WriteLine($"CountryGenerator: New player: {playerCountry}");
+			}
 			for ( int i = 0; i < enemies; i++ ) {
 				var newCountry = Generate(false);
 				Countries.Add(newCountry);

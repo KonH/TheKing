@@ -5,6 +5,8 @@ using TheKing.Features.Context;
 
 namespace TheKing.Controllers {
 	class ContextController {
+		public bool AutoUpdate { get; set;  }
+
 		public event Action OnStart = new Action(() => { });
 
 		public List<Case> Cases => new List<Case>(_cases);
@@ -51,10 +53,12 @@ namespace TheKing.Controllers {
 					_out.Write(Content.root_message);
 				} else {
 					var country = _services.GetService<CountryController>().PlayerCountry;
-					var countryName = country.Name;
-					var raceName = Content.ResourceManager.GetString("race_" + country.Kind.Id); ;
-					_out.WriteFormat(Content.hello_message, countryName, raceName);
-					_started = true;
+					if ( country != null ) {
+						var countryName = country.Name;
+						var raceName = Content.ResourceManager.GetString("race_" + country.Kind.Id); ;
+						_out.WriteFormat(Content.hello_message, countryName, raceName);
+						_started = true;
+					}
 				}
 				OnStart.Invoke();
 			} else {

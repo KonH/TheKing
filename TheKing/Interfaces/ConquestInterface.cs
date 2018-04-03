@@ -84,7 +84,7 @@ namespace TheKing.Interfaces {
 		}
 
 		public void OnConquest(ConquestResult result) {
-			if ( result.Defender == _country.PlayerCountry ) {
+			if ( (result.Defender != null) && (result.Defender == _country.PlayerCountry) ) {
 				_out.WriteFormat(
 					Content.enemy_conquest_result,
 					result.Location.Name,

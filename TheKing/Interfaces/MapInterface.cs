@@ -32,6 +32,9 @@ namespace TheKing.Interfaces {
 		}
 
 		public void OnStart() {
+			if ( _country.PlayerCountry == null ) {
+				return;
+			}
 			_context.AddCase(Content.go_to_map, () => _context.GoTo(this));
 		}
 

@@ -502,5 +502,23 @@ namespace TheKing {
                 return ResourceManager.GetString("race_select", resourceCulture);
             }
         }
+        
+        internal static string mode_normal {
+            get {
+                return ResourceManager.GetString("mode_normal", resourceCulture);
+            }
+        }
+        
+        internal static string mode_free {
+            get {
+                return ResourceManager.GetString("mode_free", resourceCulture);
+            }
+        }
+        
+        internal static string one_alive {
+            get {
+                return ResourceManager.GetString("one_alive", resourceCulture);
+            }
+        }
     }
 }
