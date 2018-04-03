@@ -27,8 +27,13 @@ namespace TheKing.Controllers {
 			return GetRoutes(country).Contains(location);
 		}
 
+		int GetMoveTime(Country country, Location from, Location to) {
+			var baseDistance = from.Distance + to.Distance;
+			return (int)(baseDistance / country.Kind.Speed);
+		}
+
 		public void SendTo(Country country, Location homeLoc, Location targetLoc, IReadOnlySquad squad, Action<MoveResult> callback) {
-			var moveTime = homeLoc.Distance + targetLoc.Distance;
+			var moveTime = GetMoveTime(country, homeLoc, targetLoc);
 			Debug.WriteLine($"MoveController.SendTo: Send {country} squad from {homeLoc.Name} to {targetLoc.Name}: days = {moveTime}");
 			var routes = GetRoutes(country);
 			routes.Add(targetLoc);

@@ -29,8 +29,14 @@ namespace TheKing.Controllers {
 		}
 
 		class ArmyState {
-			public Gold        Usage  { get; set; } = new Gold(5);
-			public List<Squad> Squads { get; }      = new List<Squad>();
+			public double      Power  { get; }
+			public Gold        Usage  { get; }
+			public List<Squad> Squads { get; } = new List<Squad>();
+
+			public ArmyState(double power, int usage) {
+				Power = power;
+				Usage = new Gold(usage);
+			}
 		}
 
 		PopulationController _population;
@@ -42,7 +48,11 @@ namespace TheKing.Controllers {
 		}
 
 		ArmyState GetArmy(Country country) {
-			return DictUtils.GetOrCreate(country, _armyStates, () => new ArmyState());
+			return DictUtils.GetOrCreate(country, _armyStates, () => CreateState(country.Kind));
+		}
+
+		ArmyState CreateState(Race kind) {
+			return new ArmyState(kind.Power, kind.SoldierPrice);
 		}
 
 		Squad GetOrCreateSquad(ArmyState army) {
@@ -64,6 +74,10 @@ namespace TheKing.Controllers {
 			return GetArmy(country).Squads
 				.Where(s => s.Free)
 				.Sum(s => s.Count);
+		}
+
+		public double GetPower(Country country) {
+			return GetArmy(country).Power;
 		}
 
 		public Gold GetUsagePerSoldier(Country country) {

@@ -349,4 +349,7 @@
   <data name="enemy_conquest_success" xml:space="preserve">
     <value>We lost {0}.</value>
   </data>
+	<data name="race_select" xml:space="preserve">
+		<value>Select your race:</value>
+	</data>
 </root>

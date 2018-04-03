@@ -102,15 +102,24 @@ namespace TheKing.Controllers {
 			}
 		}
 
+		int GetPower(Country country, int soldiers) {
+			return (int)Math.Ceiling(_army.GetPower(country) * soldiers);
+		}
+
 		ConquestResult TryDefeat(
 			Location location, MoveResult moveResult, Country invader, ref IReadOnlySquad invaderSquad, Country defender, ref IReadOnlySquad defenderSquad
 		) {
-			var invaderCount = invaderSquad.Count;
+			var invaderCount  = invaderSquad.Count;
 			var defenderCount = defenderSquad.Count;
-			defenderSquad = _army.KillInSquad(defender, defenderSquad, invaderCount);
-			invaderSquad = _army.KillInSquad(invader, invaderSquad, defenderCount);
-			var invaderLoses = invaderCount - (invaderSquad != null ? invaderSquad.Count : 0);
+			var invaderPower  = GetPower(invader, invaderCount);
+			var defenderPower = GetPower(defender, defenderCount);
+
+			defenderSquad = _army.KillInSquad(defender, defenderSquad, invaderPower);
+			invaderSquad  = _army.KillInSquad(invader, invaderSquad, defenderPower);
+
+			var invaderLoses  = invaderCount - (invaderSquad != null ? invaderSquad.Count : 0);
 			var defenderLoses = defenderCount - (defenderSquad != null ? defenderSquad.Count : 0);
+
 			return new ConquestResult(
 				location,
 				invader, defender, 

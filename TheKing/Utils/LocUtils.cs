@@ -3,7 +3,11 @@
 namespace TheKing.Utils {
 	static class LocUtils {
 		public static string TranslateRaceName(Country country) {
-			return Content.ResourceManager.GetString("race_" + country.Kind.Id);
+			return TranslateRaceName(country.Kind.Id);
+		}
+
+		public static string TranslateRaceName(RaceId raceId) {
+			return Content.ResourceManager.GetString("race_" + raceId);
 		}
 	}
 }

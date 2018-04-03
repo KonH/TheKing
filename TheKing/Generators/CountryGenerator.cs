@@ -1,29 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using TheKing.Features.Countries;
 using TheKing.Utils;
+using TheKing.Settings;
+using TheKing.Features.Countries;
 
 namespace TheKing.Generators {
 	class CountryGenerator {
 		public List<Country> Countries { get; } = new List<Country>();
 
+		RaceSettings _settings;
+
+		public CountryGenerator(RaceSettings settings) {
+			_settings = settings;
+		}
+
 		public void Generate(int enemies) {
 			Countries.Clear();
-			var playerRace = RaceId.Human;
-			var playerCountry = new Country(GenerateUniqueName(playerRace), new Race(playerRace), true);
+			var playerCountry = Generate(true);
 			Countries.Add(playerCountry);
 			Debug.WriteLine($"CountryGenerator: New player: {playerCountry}");
 			for ( int i = 0; i < enemies; i++ ) {
-				var newCountry = Generate();
+				var newCountry = Generate(false);
 				Countries.Add(newCountry);
 				Debug.WriteLine($"CountryGenerator: New enemy: {newCountry}");
 			}
 		}
 
-		RaceId GetRace() {
-			var allRaces = (RaceId[])Enum.GetValues(typeof(RaceId));
-			return RandUtils.GetItem(allRaces);
+		Race GetRace(bool player) {
+			if ( player && (_settings.PlayerRace != null) ) {
+				return _settings.PlayerRace;
+			}
+			var allRaces = _settings.AllRaces;
+			var id = RandUtils.GetItem(allRaces);
+			return _settings.Get(id);
 		}
 
 		string GenerateUniqueName(RaceId race) {
@@ -41,9 +50,9 @@ namespace TheKing.Generators {
 			return RandUtils.GetItem(nameParts);
 		}
 
-		Country Generate() {
-			var race = GetRace();
-			return new Country(GenerateUniqueName(race), new Race(race), false);
+		Country Generate(bool player) {
+			var race = GetRace(player);
+			return new Country(GenerateUniqueName(race.Id), race, player);
 		}
 	}
 }
