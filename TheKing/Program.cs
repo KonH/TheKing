@@ -31,12 +31,9 @@ namespace TheKing {
 				.With(new Race(RaceId.Halfling, 100, 0.024, 0.43, 0.75, 0.50,  4, LocationType.Lands))
 				.With(new Race(RaceId.Orc,      150, 0.023, 0.76, 1.50, 0.15,  4, LocationType.Barrens));
 
-			var provider = Configure(mapSettings, raceSettings);
-			var startMenu = provider.GetService<StartMenuController>();
-			PreRun(startMenu);
-			Generate(provider, startMenu.WithPlayer);
-			Init(provider);
-			Run(provider);
+			var provider = Configure(mapSettings, raceSettings).PreRun().Generate().Init();
+
+			provider.Run();
 		}
 
 		static ServiceProvider Configure(MapSettings mapSettings, RaceSettings raceSettings) {
@@ -69,31 +66,10 @@ namespace TheKing {
 				.AddSingleton<IStartHandler, SleepInterface>()
 				.AddSingleton<IStartHandler, FreeModeInterface>()
 				.AddConquestInterface()
-				.AddSingleton<StartMenuController>();
+				.AddSingleton<GameSettings>()
+				.AddSingleton<StartMenuController>()
+				.AddGameController();
 			return services.BuildServiceProvider();
-		}
-
-		static void PreRun(StartMenuController startMenu) {
-			startMenu.Run();
-		}
-
-		static void Generate(IServiceProvider provider, bool withPlayer) {
-			provider.GetService<CountryGenerator>().Generate(withPlayer, 5);
-			provider.GetService<MapGenerator>().Generate();
-		}
-
-		static void Init(IServiceProvider provider) {
-			provider
-				.PerformOneToMany<TimeController, IDayStarter>         ((c, h) => c.OnDayStart += h.OnDayStart)
-				.PerformOneToMany<ContextController, IStartHandler>    ((c, h) => c.OnStart += h.OnStart)
-				.PerformOneToMany<CountryController, ICountryHandler>  ((c, h) => c.OnCountryRemoved += h.OnCountryRemoved)
-				.PerformOneToMany<ConquestController, IConquestHandler>((c, h) => c.OnConquest += h.OnConquest);
-		}
-
-		static void Run(IServiceProvider provider) {
-			provider.GetService<GameLogics>().Run();
-			Console.WriteLine("Press any key...");
-			Console.ReadKey();
 		}
 	}
 }

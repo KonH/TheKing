@@ -7,6 +7,8 @@ using TheKing.Features.Time;
 using TheKing.Features.Context;
 using TheKing.Features.Countries;
 using TheKing.Features.Conquest;
+using TheKing.Settings;
+using TheKing.Generators;
 
 namespace TheKing {
 	static class Extensions {
@@ -73,8 +75,48 @@ namespace TheKing {
 				.AddSingleton<IConquestHandler, ConquestInterface>(conquestInterface);
 		}
 
+		public static IServiceCollection AddGameController(this IServiceCollection services) {
+			var controller = SingletonFactory<IGameController>.Create(provider => {
+				if ( provider.GetService<GameSettings>().WithPlayer ) {
+					return new PlayerController(
+						provider.GetService<ContextController>(),
+						provider.GetService<InputController>(),
+						provider.GetService<OutputController>());
+				} else {
+					return new AutoController();
+				}
+			});
+			return services.AddSingleton(controller);
+		}
 
-		public static IServiceProvider PerformOneToMany<TController, TInterface>(this IServiceProvider provider, Action<TController, TInterface> act) {
+		public static IServiceProvider PreRun(this IServiceProvider provider) {
+			provider.GetService<StartMenuController>().Run();
+			return provider;
+		}
+
+		public static IServiceProvider Generate(this IServiceProvider provider) {
+			provider.GetService<CountryGenerator>().Generate();
+			provider.GetService<MapGenerator>    ().Generate();
+			return provider;
+		}
+
+		public static IServiceProvider Init(this IServiceProvider provider) {
+			provider
+				.SubscribeFor<TimeController,     IDayStarter>     ((c, h) => c.OnDayStart       += h.OnDayStart)
+				.SubscribeFor<ContextController,  IStartHandler>   ((c, h) => c.OnStart          += h.OnStart)
+				.SubscribeFor<CountryController,  ICountryHandler> ((c, h) => c.OnCountryRemoved += h.OnCountryRemoved)
+				.SubscribeFor<ConquestController, IConquestHandler>((c, h) => c.OnConquest       += h.OnConquest);
+			return provider;
+		}
+
+		public static void Run(this IServiceProvider provider) {
+			var controller = provider.GetService<IGameController>();
+			provider.GetService<GameLogics>().Run(controller);
+			Console.WriteLine("Press any key...");
+			Console.ReadKey();
+		}
+
+		static IServiceProvider SubscribeFor<TController, TInterface>(this IServiceProvider provider, Action<TController, TInterface> act) {
 			var source = provider.GetService<TController>();
 			var destinations = provider.GetServices<TInterface>();
 			foreach ( var listener in destinations ) {

@@ -1,28 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Diagnostics;
+using System.Collections.Generic;
 using TheKing.Utils;
 using TheKing.Settings;
 using TheKing.Features.Countries;
-using System.Linq;
 
 namespace TheKing.Generators {
 	class CountryGenerator {
 		public List<Country> Countries { get; } = new List<Country>();
 
-		RaceSettings _settings;
+		GameSettings _gameSettings;
+		RaceSettings _raceSettings;
 
-		public CountryGenerator(RaceSettings settings) {
-			_settings = settings;
+		public CountryGenerator(GameSettings gameSettings, RaceSettings raceSettings) {
+			_gameSettings = gameSettings;
+			_raceSettings = raceSettings;
 		}
 
-		public void Generate(bool withPlayer, int enemies) {
+		public void Generate() {
 			Countries.Clear();
-			if ( withPlayer ) {
+			if ( _gameSettings.WithPlayer ) {
 				var playerCountry = Generate(true);
 				Countries.Add(playerCountry);
 				Debug.WriteLine($"CountryGenerator: New player: {playerCountry}");
 			}
-			for ( int i = 0; i < enemies; i++ ) {
+			for ( int i = 0; i < _gameSettings.Enemies; i++ ) {
 				var newCountry = Generate(false);
 				Countries.Add(newCountry);
 				Debug.WriteLine($"CountryGenerator: New enemy: {newCountry}");
@@ -30,17 +32,17 @@ namespace TheKing.Generators {
 		}
 
 		Race GetRace(bool player) {
-			if ( player && (_settings.PlayerRace != null) ) {
-				return _settings.PlayerRace;
+			if ( player && (_raceSettings.PlayerRace != null) ) {
+				return _raceSettings.PlayerRace;
 			}
-			var allRaces = _settings.AllRaces;
+			var allRaces = _raceSettings.AllRaces;
 			var raceChances = new List<double>();
 			foreach ( var race in allRaces ) {
 				var count = Countries.Count(c => c.Kind.Id == race);
 				raceChances.Add(1 / (2 * count + 1));
 			}
 			var id = RandUtils.GetItemWithChances(allRaces, raceChances);
-			return _settings.Get(id);
+			return _raceSettings.Get(id);
 		}
 
 		string GenerateUniqueName(RaceId race) {

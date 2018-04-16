@@ -4,28 +4,27 @@ using TheKing.Settings;
 
 namespace TheKing.Controllers {
 	class StartMenuController {
-		public bool WithPlayer { get; private set; }
-
+		GameSettings     _settings;
 		InputController  _input;
 		OutputController _output;
-		RaceSettings      _races;
+		RaceSettings     _races;
 		CheatController  _cheats;
 
 		public StartMenuController(
-			InputController input, OutputController output, RaceSettings races, CheatController cheats = null
+			GameSettings settings, InputController input, OutputController output, RaceSettings races, CheatController cheats = null
 		) {
-			_input  = input;
-			_output = output;
-			_races  = races;
-			_cheats = cheats;
+			_settings = settings;
+			_input    = input;
+			_output   = output;
+			_races    = races;
+			_cheats   = cheats;
 		}
 
 		public void Run() {
 			_output.Write(Content.title);
 			_output.Write();
 			UpdateCheats();
-			UpdateMode();
-			if ( WithPlayer ) {
+			if ( _settings.WithPlayer ) {
 				UpdateRaceSelection();
 			}
 		}
@@ -37,7 +36,8 @@ namespace TheKing.Controllers {
 				var cheatDict = new Dictionary<char, string> {
 					{ 'm', nameof(CheatController.MoneyDecreaseDisabled) },
 					{ 'd', nameof(CheatController.AllDiscovered) },
-					{ 'c', nameof(CheatController.NonConquestable) }
+					{ 'c', nameof(CheatController.NonConquestable) },
+					{ 'f', nameof(CheatController.FreeMode) }
 				};
 
 				foreach ( var cheat in cheatDict ) {
@@ -49,20 +49,11 @@ namespace TheKing.Controllers {
 						typeof(CheatController).GetProperty(cheat.Value).SetValue(_cheats, true);
 					}
 				}
+				if ( _cheats.FreeMode ) {
+					_settings.WithPlayer = false;
+				}
 			}
 			_output.Write();
-		}
-
-		void UpdateMode() {
-			_output.Write($"1) {Content.mode_normal}");
-			_output.Write($"2) {Content.mode_free}");
-			do {
-				var selection = _input.ReadInt();
-				if ( (selection > 0) && (selection <= 2) ) {
-					WithPlayer = (selection == 0);
-					return;
-				}
-			} while ( true );
 		}
 
 		void UpdateRaceSelection() {

@@ -5,8 +5,6 @@ using TheKing.Features.Context;
 
 namespace TheKing.Controllers {
 	class ContextController {
-		public bool AutoUpdate { get; set;  }
-
 		public event Action OnStart = new Action(() => { });
 
 		public List<Case> Cases => new List<Case>(_cases);
@@ -48,6 +46,7 @@ namespace TheKing.Controllers {
 		}
 
 		public void Update() {
+			ClearCases();
 			if ( _curContext == null ) {
 				if ( _started ) {
 					_out.Write(Content.root_message);

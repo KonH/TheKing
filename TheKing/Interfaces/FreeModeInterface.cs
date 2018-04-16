@@ -4,11 +4,13 @@ using TheKing.Controllers;
 using TheKing.Features.Context;
 using TheKing.Features.Countries;
 using TheKing.Features.Map;
+using TheKing.Settings;
 using TheKing.Utils;
 
 namespace TheKing.Interfaces {
 	class FreeModeInterface : IStartHandler {
-		OutputController _out;
+		GameSettings      _settings;
+		OutputController  _out;
 		ContextController _context;
 		CountryController _country;
 		MapController     _map;
@@ -17,28 +19,20 @@ namespace TheKing.Interfaces {
 		Dictionary<Country, ConsoleColor> _colorMap = new Dictionary<Country, ConsoleColor>();
 
 		public FreeModeInterface(
-			OutputController output, ContextController context,
+			GameSettings settings, OutputController output, ContextController context,
 			CountryController country, MapController map, TimeController time
 		) {
-			_out     = output;
-			_context = context;
-			_country = country;
-			_map     = map;
-			_time    = time;
+			_settings = settings;
+			_out      = output;
+			_context  = context;
+			_country  = country;
+			_map      = map;
+			_time     = time;
 		}
 
 		public void OnStart() {
-			if ( _country.PlayerCountry == null ) {
-				if ( _context.AutoUpdate ) {
-					_time.NextDay();
-				} else {
-					_context.AddCase("Next", () => {
-						_time.NextDay();
-					});
-					_context.AddCase("Auto", () => {
-						_context.AutoUpdate = true;
-					});
-				}
+			if ( !_settings.WithPlayer ) {
+				_time.NextDay();
 				Overview();
 				ShowLegend();
 			}

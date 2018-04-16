@@ -15,7 +15,13 @@ namespace TheKing.Common {
 		bool   _isWin;
 		string _endDescription;
 
-		public GameLogics(InputController input, OutputController output, ContextController context, CountryController country, TimeController time) {
+		public GameLogics(
+			InputController   input,
+			OutputController  output,
+			ContextController context,
+			CountryController country,
+			TimeController    time
+		) {
 			_input   = input;
 			_out     = output;
 			_context = context;
@@ -23,9 +29,9 @@ namespace TheKing.Common {
 			_time    = time;
 		}
 
-		public void Run() {
+		public void Run(IGameController controller) {
 			_time.FirstDay();
-			while ( Update() ) { }
+			while ( Update(controller) ) { }
 		}
 
 		void Fail(string description) {
@@ -38,25 +44,14 @@ namespace TheKing.Common {
 			_endDescription = description;
 		}
 
-		bool Update() {
-			_context.ClearCases();
+		bool Update(IGameController controller) {
 			_context.Update();
 			_out.Write();
 			if ( _isWin || _isFail ) {
 				_out.Write(_endDescription);
 				return false;
 			}
-			_context.WriteCases();
-			if ( _context.AutoUpdate ) {
-				return true;
-			}
-			var nextAction = _input.Update(_context.Cases);
-			if ( nextAction != null ) {
-				_out.Write();
-				nextAction();
-				return true;
-			}
-			return false;
+			return controller.Update();
 		}
 
 		public void OnDayStart() {
